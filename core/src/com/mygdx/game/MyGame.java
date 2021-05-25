@@ -16,6 +16,8 @@ public class MyGame extends Game {
 	private int widthScreen, heightScreen;
 	private OrthographicCamera orthographicCamera;
 
+
+	// Metodos //
 	public MyGame(){
 		INSTANCE = this;
 	}
