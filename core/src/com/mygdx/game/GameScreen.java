@@ -47,23 +47,26 @@ public class GameScreen extends ScreenAdapter {
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
-        this.tiledMapHelper = new TiledMapHelper();
+        this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
         player = new Texture(Gdx.files.internal("PJ/PJ.png"));
+
         //Crear un rectangulo para representar al personaje logicamente
+
         pj = new Rectangle();
         pj.x = 0;
         pj.y = 0;
         pj.width = 64;
         pj.height = 64;
 
-        //Camara
-
-
 
         }
+
+    public World getWorld() {
+        return world;
+    }
 
     private void update(float delta){
 
