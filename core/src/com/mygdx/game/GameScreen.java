@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import Models.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -29,8 +30,9 @@ public class GameScreen extends ScreenAdapter {
     private TiledMapHelper tiledMapHelper;
 
     //PJ
-    private Texture player;
-    private Rectangle pj;
+    private Texture playerTexture;
+    private Rectangle pjRectangle;
+    private Player pj;
 
 
 
@@ -51,15 +53,17 @@ public class GameScreen extends ScreenAdapter {
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
-        player = new Texture(Gdx.files.internal("PJ/PJ.png"));
+        playerTexture = new Texture(Gdx.files.internal("PJ/PJ.png"));
+
 
         //Crear un rectangulo para representar al personaje logicamente
+        pjRectangle = new Rectangle();
+        pjRectangle.x = 0;
+        pjRectangle.y = 0;
+        pjRectangle.width = 64;
+        pjRectangle.height = 64;
 
-        pj = new Rectangle();
-        pj.x = 0;
-        pj.y = 0;
-        pj.width = 64;
-        pj.height = 64;
+        pj = new Player("Poo",3, pjRectangle, playerTexture);
 
 
         }
@@ -88,7 +92,7 @@ public class GameScreen extends ScreenAdapter {
 
     //Para que la camara siga al jugador
     private void cameraUpdate(){
-        camera.position.set(new Vector3(pj.x,pj.y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la derecha
+        camera.position.set(new Vector3(pj.getPj().x,pj.getPj().y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la derecha
         camera.update();
 
 
@@ -115,18 +119,18 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(player,pj.x,pj.y);
+        batch.draw(playerTexture,pj.getPj().x,pj.getPj().y);
 
 
         batch.end();
 
         //Movimiento del pj
-        playerMove();
+        pj.playerMove();
         //Hay que verificando si el PJ esta en la pantalla
 
 
     }
-
+/*
     public void playerMove (){
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             pj.x -= 200 * Gdx.graphics.getDeltaTime();
@@ -142,7 +146,7 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-
+*/
 
 
 
