@@ -53,17 +53,7 @@ public class GameScreen extends ScreenAdapter {
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
-        playerTexture = new Texture(Gdx.files.internal("PJ/PJ.png"));
-
-
-        //Crear un rectangulo para representar al personaje logicamente
-        pjRectangle = new Rectangle();
-        pjRectangle.x = 0;
-        pjRectangle.y = 0;
-        pjRectangle.width = 64;
-        pjRectangle.height = 64;
-
-        pj = new Player("Poo",3, pjRectangle, playerTexture);
+        pj = new Player("Poo",3, this);
 
 
         }
@@ -119,34 +109,18 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(playerTexture,pj.getPj().x,pj.getPj().y);
+        batch.draw(pj.getPlayer(), pj.getPj().x,pj.getPj().y);
 
 
         batch.end();
 
         //Movimiento del pj
         pj.playerMove();
-        //Hay que verificando si el PJ esta en la pantalla
+        //Hay que verificar si el PJ esta en la pantalla
 
 
     }
-/*
-    public void playerMove (){
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            pj.x -= 200 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            pj.x += 200 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            pj.y += 200 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            pj.y -= 200 * Gdx.graphics.getDeltaTime();
-        }
-    }
 
-*/
 
 
 
