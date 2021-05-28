@@ -36,11 +36,6 @@ public class GameScreen extends ScreenAdapter {
 
 
 
-
-
-
-
-
     // Metodos //
 
     public GameScreen(OrthographicCamera camera) {
@@ -49,12 +44,12 @@ public class GameScreen extends ScreenAdapter {
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
+
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
         pj = new Player("Poo",3, this);
-
 
         }
 
@@ -66,8 +61,6 @@ public class GameScreen extends ScreenAdapter {
 
         world.step(1/60f,6,2);
         cameraUpdate();
-
-
 
 
         orthogonalTiledMapRenderer.setView(camera);
@@ -82,7 +75,7 @@ public class GameScreen extends ScreenAdapter {
 
     //Para que la camara siga al jugador
     private void cameraUpdate(){
-        camera.position.set(new Vector3(pj.getPj().x,pj.getPj().y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la derecha
+        camera.position.set(new Vector3(pj.getBody().getPosition().x,pj.getBody().getPosition().y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
         camera.update();
 
 
@@ -109,7 +102,7 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(pj.getPlayer(), pj.getPj().x,pj.getPj().y);
+        batch.draw(pj.getPlayer(), pj.getPj().x - 1,pj.getPj().y + 70);
 
 
         batch.end();

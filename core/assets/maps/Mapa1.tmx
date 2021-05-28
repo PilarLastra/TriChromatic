@@ -71,7 +71,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="Objetos">
+ <objectgroup id="6" name="Objetos" locked="1">
   <object id="1" x="0" y="512">
    <polygon points="0,0 64,0 64,-512 0,-512"/>
   </object>
