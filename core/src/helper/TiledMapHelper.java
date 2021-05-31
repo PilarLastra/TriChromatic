@@ -1,12 +1,10 @@
 package helper;
 
-import Models.Player;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +28,12 @@ public class TiledMapHelper {
 
 
     }
+//Este get esta echo para poder pasarle el mapa al actor
+    public TiledMap getTiledMap() {
+        return tiledMap;
+    }
+
+
 
     public OrthogonalTiledMapRenderer setupMap(){
 

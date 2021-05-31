@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
-import Models.Player;
+import Models.Controller;
+import Models.Actor;
+import Models.Setting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -15,13 +17,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
 
-import java.awt.*;
-
 import static helper.Constante.PPM;
 
 public class GameScreen extends ScreenAdapter {
 
     private OrthographicCamera camera;
+
     private SpriteBatch batch;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -30,9 +31,10 @@ public class GameScreen extends ScreenAdapter {
     private TiledMapHelper tiledMapHelper;
 
     //PJ
-    private Texture playerTexture;
-    private Rectangle pjRectangle;
-    private Player pj;
+    private Texture playerStandig;
+    private Controller controller;
+    private Actor pj;
+
 
 
 
@@ -40,6 +42,7 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
+
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
@@ -49,7 +52,11 @@ public class GameScreen extends ScreenAdapter {
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
-        pj = new Player("Poo",3, this);
+        playerStandig = new Texture ("PJ/pj0.png");
+
+        pj = new Actor(1,1);
+
+        controller = new Controller(pj);
 
         }
 
@@ -58,6 +65,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update(float delta){
+        float accel = 0;
 
         world.step(1/60f,6,2);
         cameraUpdate();
@@ -65,6 +73,7 @@ public class GameScreen extends ScreenAdapter {
 
         orthogonalTiledMapRenderer.setView(camera);
         batch.setProjectionMatrix(camera.combined);
+
 
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -75,12 +84,8 @@ public class GameScreen extends ScreenAdapter {
 
     //Para que la camara siga al jugador
     private void cameraUpdate(){
-        camera.position.set(new Vector3(pj.getBody().getPosition().x,pj.getBody().getPosition().y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
+        camera.position.set(new Vector3(pj.getWorldX()* Setting.SCALED_TILE_SIZE,pj.getWorldY()* Setting.SCALED_TILE_SIZE,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
         camera.update();
-
-
-
-
     }
 
 
@@ -88,6 +93,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
+        pj.update(delta);
         update(Gdx.graphics.getDeltaTime());
 
 
@@ -102,21 +108,27 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(pj.getPlayer(), pj.getPj().x - 1,pj.getPj().y + 70);
+
+
+        batch.draw(playerStandig, pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
+                Setting.SCALED_TILE_SIZE * 0.4f,Setting.SCALED_TILE_SIZE*0.5f);
 
 
         batch.end();
 
-        //Movimiento del pj
-        pj.playerMove();
-        //Hay que verificar si el PJ esta en la pantalla
+
 
 
     }
 
 
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(controller);
 
 
+
+    }
 }
 
