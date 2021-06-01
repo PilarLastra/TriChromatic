@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import Models.AnimationSet;
 import Models.Controller;
 import Models.Actor;
 import Models.Setting;
@@ -9,7 +10,10 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -47,6 +51,18 @@ public class GameScreen extends ScreenAdapter {
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
+        TextureAtlas atlas = MyGame.INSTANCE.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
+        //Se divide por dos pq se estima que x tile va a dar dos pasos
+        AnimationSet animations = new AnimationSet(
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
+        new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
+                atlas.findRegion("dawn_stand_north"),
+                atlas.findRegion("dawn_stand_south"),
+                atlas.findRegion("dawn_stand_east"),
+                atlas.findRegion("dawn_stand_west"));
+
 
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
@@ -54,7 +70,7 @@ public class GameScreen extends ScreenAdapter {
         //PJ
         playerStandig = new Texture ("PJ/pj0.png");
 
-        pj = new Actor(1,1);
+        pj = new Actor(1,1, animations);
 
         controller = new Controller(pj);
 
@@ -93,6 +109,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
+        controller.update(delta);
+
         pj.update(delta);
         update(Gdx.graphics.getDeltaTime());
 
@@ -110,7 +128,7 @@ public class GameScreen extends ScreenAdapter {
 
 
 
-        batch.draw(playerStandig, pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
+        batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
                 Setting.SCALED_TILE_SIZE * 0.4f,Setting.SCALED_TILE_SIZE*0.5f);
 
 
