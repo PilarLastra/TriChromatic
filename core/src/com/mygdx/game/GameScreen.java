@@ -1,13 +1,19 @@
 package com.mygdx.game;
 
-import Models.Player;
+import Models.AnimationSet;
+import Models.Controller;
+import Models.Actor;
+import Models.Setting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -15,13 +21,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
 
-import java.awt.*;
-
 import static helper.Constante.PPM;
 
 public class GameScreen extends ScreenAdapter {
 
     private OrthographicCamera camera;
+
     private SpriteBatch batch;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -30,13 +35,9 @@ public class GameScreen extends ScreenAdapter {
     private TiledMapHelper tiledMapHelper;
 
     //PJ
-    private Texture playerTexture;
-    private Rectangle pjRectangle;
-    private Player pj;
-
-
-
-
+    private Texture playerStandig;
+    private Controller controller;
+    private Actor pj;
 
 
 
@@ -45,16 +46,33 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
+
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
+
+        TextureAtlas atlas = MyGame.INSTANCE.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
+        //Se divide por dos pq se estima que x tile va a dar dos pasos
+        AnimationSet animations = new AnimationSet(
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
+        new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
+                atlas.findRegion("dawn_stand_north"),
+                atlas.findRegion("dawn_stand_south"),
+                atlas.findRegion("dawn_stand_east"),
+                atlas.findRegion("dawn_stand_west"));
+
 
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
         //PJ
-        pj = new Player("Poo",3, this);
+        playerStandig = new Texture ("PJ/pj0.png");
 
+        pj = new Actor(1,1, animations);
+
+        controller = new Controller(pj);
 
         }
 
@@ -63,15 +81,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update(float delta){
+        float accel = 0;
 
         world.step(1/60f,6,2);
         cameraUpdate();
 
 
-
-
         orthogonalTiledMapRenderer.setView(camera);
         batch.setProjectionMatrix(camera.combined);
+
 
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -82,12 +100,8 @@ public class GameScreen extends ScreenAdapter {
 
     //Para que la camara siga al jugador
     private void cameraUpdate(){
-        camera.position.set(new Vector3(pj.getPj().x,pj.getPj().y,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la derecha
+        camera.position.set(new Vector3(pj.getWorldX()* Setting.SCALED_TILE_SIZE,pj.getWorldY()* Setting.SCALED_TILE_SIZE,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
         camera.update();
-
-
-
-
     }
 
 
@@ -95,6 +109,9 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
+        controller.update(delta);
+
+        pj.update(delta);
         update(Gdx.graphics.getDeltaTime());
 
 
@@ -109,21 +126,27 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(pj.getPlayer(), pj.getPj().x,pj.getPj().y);
+
+
+        batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
+                Setting.SCALED_TILE_SIZE * 0.4f,Setting.SCALED_TILE_SIZE*0.5f);
 
 
         batch.end();
 
-        //Movimiento del pj
-        pj.playerMove();
-        //Hay que verificar si el PJ esta en la pantalla
+
 
 
     }
 
 
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(controller);
 
 
+
+    }
 }
 

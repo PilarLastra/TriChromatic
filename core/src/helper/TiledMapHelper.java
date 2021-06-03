@@ -1,18 +1,14 @@
 package helper;
 
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.GameScreen;
 
 import static helper.Constante.PPM;
@@ -23,13 +19,21 @@ public class TiledMapHelper {
     private GameScreen gameScreen;
 
 
+
     // Metodos //
 
     public TiledMapHelper(GameScreen gameScreen){
         this.gameScreen = gameScreen;
 
 
+
     }
+//Este get esta echo para poder pasarle el mapa al actor
+    public TiledMap getTiledMap() {
+        return tiledMap;
+    }
+
+
 
     public OrthogonalTiledMapRenderer setupMap(){
 
@@ -55,26 +59,29 @@ public class TiledMapHelper {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = gameScreen.getWorld().createBody(bodyDef);
         Shape shape = createPolygonShape (polygonMapObject);
-        body.createFixture(shape, 1000);
+        body.createFixture(shape, 1.0f);
         shape.dispose();
 
     }
 
-    private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
+    private ChainShape createPolygonShape(PolygonMapObject polygonMapObject) {
 
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
 
-        for(int i =0; i < vertices.length / 2; i++){
+        for(int i =0; i < worldVertices.length; i++){
 
-            Vector2 current = new Vector2(vertices[i * 2] / PPM, vertices[i * 2 + 1] / PPM);
-            worldVertices[i] = current;
+            worldVertices[i] = new Vector2(vertices[i * 2] / PPM, vertices[i * 2 + 1] / PPM);
+
         }
 
-        PolygonShape shape = new PolygonShape();
-        shape.set(worldVertices);
-        return shape;
+        ChainShape cs = new ChainShape();
+        cs.createChain(worldVertices);
+        return cs;
+
     }
+
+
 
 
 }
