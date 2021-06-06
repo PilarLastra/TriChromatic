@@ -160,6 +160,12 @@ public class Actor {
 
 
 
+    public ACTOR_STATE getMovementState() {
+        return state;
+    }
+
+
+
 
     /*
     public Body crearPlayer() {
