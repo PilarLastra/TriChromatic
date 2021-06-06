@@ -1,22 +1,11 @@
-package Models;
+package Models.actor;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import Models.AnimationSet;
+import Models.Direction;
+import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameScreen;
-import helper.TiledMapHelper;
-
-import java.awt.*;
-import java.awt.geom.RectangularShape;
-
-import static helper.Constante.PPM;
 
 //Le cambie el nombre de player a actor pq puede haber mas actores en pantalla
 public class Actor {
@@ -121,7 +110,7 @@ public class Actor {
         }
 
         // No se va de los limites del mapa sa sa saaaaaaaaaaaaaaaaaa
-        if( x+ dir.getDx() <0 || x + dir.getDx() >=Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
+        if( x+ dir.getDx() <0 || x + dir.getDx() >= Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
             return false;
         }
         initializeMove(dir);

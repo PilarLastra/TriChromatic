@@ -1,9 +1,12 @@
 package com.mygdx.game;
 
-import Models.AnimationSet;
-import Models.Controller;
-import Models.Actor;
-import Models.Setting;
+
+import Controller.ControllerActor;
+import Models.*;
+import Models.actor.Actor;
+import Models.actor.ActorObserver;
+import Models.actor.Actor_Behavior;
+import Models.actor.LimitedWalkingBehavior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -21,6 +24,10 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
 import static helper.Constante.PPM;
 
 public class GameScreen extends ScreenAdapter {
@@ -36,8 +43,17 @@ public class GameScreen extends ScreenAdapter {
 
     //PJ
     private Texture playerStandig;
-    private Controller controller;
+    private ControllerActor controller;
     private Actor pj;
+
+    private Actor npc;
+
+    private HashMap<Actor, Actor_Behavior> brains;
+
+    private LimitedWalkingBehavior npc1;
+
+
+    private List<Actor> actors;
 
 
 
@@ -72,7 +88,21 @@ public class GameScreen extends ScreenAdapter {
 
         pj = new Actor(1,1, animations);
 
-        controller = new Controller(pj);
+        controller = new ControllerActor(pj);
+
+        ///  npc
+
+        Random rnd = new Random();
+
+         npc = new Actor(8,5, animations);
+
+         ///le asigna comportamiento al npc
+
+         npc1 = new LimitedWalkingBehavior(npc, 1,1,1,1,0,1,rnd);
+
+
+        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+
 
         }
 
@@ -80,7 +110,10 @@ public class GameScreen extends ScreenAdapter {
         return world;
     }
 
+
+
     private void update(float delta){
+
         float accel = 0;
 
         world.step(1/60f,6,2);
@@ -104,6 +137,17 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
     }
 
+    public void addActor(Actor a) {
+
+        actors.add(a);
+    }
+
+    public void addActor(Actor a, Actor_Behavior b) {
+        addActor(a);
+        brains.put(a, b);
+    }
+
+
 
 
     @Override
@@ -112,6 +156,8 @@ public class GameScreen extends ScreenAdapter {
         controller.update(delta);
 
         pj.update(delta);
+        npc.update(delta);
+        npc1.update(delta);
         update(Gdx.graphics.getDeltaTime());
 
 
@@ -129,7 +175,12 @@ public class GameScreen extends ScreenAdapter {
 
 
         batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
-                Setting.SCALED_TILE_SIZE * 0.4f,Setting.SCALED_TILE_SIZE*0.5f);
+                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
+
+        batch.draw(npc.getSprite(), npc.getWorldX() * Setting.SCALED_TILE_SIZE , npc.getWorldY() * Setting.SCALED_TILE_SIZE,
+                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
+
+
 
 
         batch.end();
