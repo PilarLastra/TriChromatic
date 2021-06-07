@@ -45,18 +45,16 @@ public class GameScreen extends ScreenAdapter {
     private ControllerActor controller;
     private Actor pj;
 
-    private Actor npc;
+   // private Actor npc;
 
-    private HashMap<Actor, Actor_Behavior> brains = new HashMap<Actor, Actor_Behavior>();
-
-    private LimitedWalkingBehavior npc1;
+   // private LimitedWalkingBehavior npc1;
 
     private Interaction_Controller interactionController;
 
-    private TileMap map;
 
+    private List<LimitedWalkingBehavior> behaviors  = new ArrayList<LimitedWalkingBehavior>();
 
-    private List<Actor> actors  = new ArrayList<Actor>();
+    private List<Actor> npcs  = new ArrayList<Actor>();
 
 
     private InputMultiplexer multiplexer;
@@ -100,20 +98,28 @@ public class GameScreen extends ScreenAdapter {
 
         Random rnd = new Random();
 
-         npc = new Actor(8,5, animations);
+      //  npc = new Actor(8,5, animations);
+        Actor npc = new Actor(8,5,animations);
+
+        Actor npc2 = new Actor (8,1,animations);
 
 
 
          ///le asigna comportamiento al npc
 
-         npc1 = new LimitedWalkingBehavior(npc, 1,1,1,1,0,5,rnd);
+         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,1,rnd);
+         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,0.5f,0.5f,0,1,rnd);
 
-         addActor(npc, npc1);
+         addNpc(npc);
+         addNpc(npc2);
+         addBehavior(behavior1);
+         addBehavior(behavior2);
 
          multiplexer = new InputMultiplexer();
 
 
-        interactionController = new Interaction_Controller(pj, npc);
+        interactionController = new Interaction_Controller(pj, npcs);
+
 
         multiplexer.addProcessor(0, controller);
         multiplexer.addProcessor(1, interactionController);
@@ -155,15 +161,15 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
     }
 
-    public void addActor(Actor a) {
+    public void addBehavior(LimitedWalkingBehavior a) {
 
-      // map.getTile(a.getX(),a.getY()).setActor(a);
-        actors.add(a);
+
+        behaviors.add(a);
     }
 
-    public void addActor(Actor a, Actor_Behavior b) {
-        addActor(a);
-        brains.put(a, b);
+    public void addNpc(Actor a) {
+        npcs.add(a);
+
     }
 
 
@@ -173,8 +179,20 @@ public class GameScreen extends ScreenAdapter {
         controller.update(delta);
 
         pj.update(delta);
-        npc.update(delta);
+
+        for (Actor actor:
+                npcs) {
+            actor.update(delta);
+            behaviors.get(npcs.indexOf(actor)).update(delta);
+
+        }
+       /* npc.update(delta);
         npc1.update(delta);
+
+        */
+
+
+
         update(Gdx.graphics.getDeltaTime());
 
 
@@ -185,26 +203,18 @@ public class GameScreen extends ScreenAdapter {
 
         box2DDebugRenderer.render(world,camera.combined.scl(PPM));
 
-
-
         batch.begin(); //renderiza objetos
-
-
 
         batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
                 Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
 
-        batch.draw(npc.getSprite(), npc.getWorldX() * Setting.SCALED_TILE_SIZE , npc.getWorldY() * Setting.SCALED_TILE_SIZE,
+
+        for (Actor npc:
+             npcs) {batch.draw(npc.getSprite(), npc.getWorldX() * Setting.SCALED_TILE_SIZE , npc.getWorldY() * Setting.SCALED_TILE_SIZE,
                 Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
-
-
-
+        }
 
         batch.end();
-
-
-
-
     }
 
 

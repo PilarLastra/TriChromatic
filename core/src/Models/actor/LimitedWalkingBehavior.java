@@ -16,10 +16,10 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
     private float timer;
     private float currentWaitTime;
 
-    private GridPoint2 moveDelta;
-    private int limNorth, limSouth, limEast, limWest;
+    private float dx, dy;
+    private float limNorth, limSouth, limEast, limWest;
 
-    public LimitedWalkingBehavior(Actor actor, int limNorth, int limSouth, int limEast, int limWest, float moveIntervalMinimum, float moveIntervalMaximum, Random random) {
+    public LimitedWalkingBehavior(Actor actor, float limNorth, float limSouth, float limEast, float limWest, float moveIntervalMinimum, float moveIntervalMaximum, Random random) {
         super(actor);
         this.limNorth = limNorth;
         this.limSouth = limSouth;
@@ -30,7 +30,8 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
         this.random = random;
         this.timer = 0f;
         this.currentWaitTime = calculateWaitTime();
-        this.moveDelta = new GridPoint2();
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
@@ -38,21 +39,22 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
         if (getActor().getMovementState() != Actor.ACTOR_STATE.STANDING) {
             return;
         }
-
         timer += delta;
         if (timer >= currentWaitTime) {
             int directionIndex = random.nextInt(Direction.values().length);
             Direction moveDirection = Direction.values()[directionIndex];
-            if (this.moveDelta.x+moveDirection.getDx() > limEast || -(this.moveDelta.x+moveDirection.getDx()) > limWest || this.moveDelta.y+moveDirection.getDy() > limNorth || -(this.moveDelta.y+moveDirection.getDy()) > limSouth) {
-                //aca tiene que hacer un refacing para mirar hacia donde estaba caminando
+            if (this.dx+moveDirection.getDx() > limEast || -(this.dx+moveDirection.getDx()) > limWest || this.dy+moveDirection.getDy() > limNorth || -(this.dy+moveDirection.getDy()) > limSouth) {
                 currentWaitTime = calculateWaitTime();
                 timer = 0f;
                 return;
             }
             boolean moved = getActor().move(moveDirection);
+
             if (moved) {
-                this.moveDelta.x += moveDirection.getDx();
-                this.moveDelta.y += moveDirection.getDy();
+                this.dx += moveDirection.getDx();
+                this.dy += moveDirection.getDy();
+
+
             }
 
             currentWaitTime = calculateWaitTime();

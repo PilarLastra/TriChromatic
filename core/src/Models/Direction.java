@@ -2,25 +2,25 @@ package Models;
 
 public enum Direction {
 
-    NORTH(0,1),
-    EAST(1,0),
-    SOUTH(0,-1),
-    WEST(-1,0),
+    NORTH(0,0.5f),
+    EAST(0.5f,0),
+    SOUTH(0,-0.5f),
+    WEST(-0.5f,0),
     ;
 
 
-    private int dx, dy;
+    private float dx, dy;
 
-    private Direction (int dx, int dy){
+    private Direction (float dx, float dy){
         this.dx = dx;
         this.dy = dy;
     }
 
-    public int getDx() {
+    public float getDx() {
         return dx;
     }
 
-    public int getDy() {
+    public float getDy() {
         return dy;
     }
 
