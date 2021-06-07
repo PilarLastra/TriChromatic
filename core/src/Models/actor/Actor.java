@@ -1,35 +1,23 @@
-package Models;
+package Models.actor;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import Models.AnimationSet;
+import Models.Direction;
+import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameScreen;
-import helper.TiledMapHelper;
-
-import java.awt.*;
-import java.awt.geom.RectangularShape;
-
-import static helper.Constante.PPM;
 
 //Le cambie el nombre de player a actor pq puede haber mas actores en pantalla
 public class Actor {
 
-    private TiledMap map;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private Direction facing;
 
     private float worldX, worldY;
 
-    private int srcX, srcY;
-    private int destX, destY; //destino
+    private float srcX, srcY; //origen
+    private float destX, destY; //destino
     private float animTimer;
     private float ANIM_TIMER = 0.3f; //Tiempo que dura la animacion
 
@@ -45,7 +33,7 @@ public class Actor {
 
 // Metodos //
 
-    public Actor(int x, int y, AnimationSet animations) {
+    public Actor(float x, float y, AnimationSet animations) {
         this.x = x;
         this.y = y;
         this.worldX = x;
@@ -55,11 +43,11 @@ public class Actor {
         this.facing = Direction.SOUTH; //Despues se sobrescribe
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -121,13 +109,15 @@ public class Actor {
         }
 
         // No se va de los limites del mapa sa sa saaaaaaaaaaaaaaaaaa
-        if( x+ dir.getDx() <0 || x + dir.getDx() >=Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
+        if( x+ dir.getDx() <0 || x + dir.getDx() >= Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
             return false;
         }
         initializeMove(dir);
 
         x += dir.getDx();
         y += dir.getDy();
+
+
 
         return true;
 
@@ -149,8 +139,8 @@ public class Actor {
 
     private void finishMove(){
         state = ACTOR_STATE.STANDING;
-        this.worldX = destX;
-        this.worldY = destY;
+        this.worldX =  destX;
+        this.worldY =  destY;
         this.srcX = 0;
         this.srcY = 0;
         this.destX = 0;
@@ -159,9 +149,26 @@ public class Actor {
     }
 
 
+    public boolean refaceWithoutAnimation(Direction dir) {
+        if (state != ACTOR_STATE.STANDING) { // can only reface when standing
+            return false;
+        }
+        this.facing = dir;
+        return true;
+    }
+
+    public Direction getFacing() {
+        return facing;
+    }
+
+    public ACTOR_STATE getMovementState() {
+        return state;
+    }
 
 
-    /*
+
+
+/*
     public Body crearPlayer() {
 
         playerStatus = new PlayerStatus(1, 3);

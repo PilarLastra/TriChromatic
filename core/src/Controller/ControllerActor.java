@@ -1,35 +1,38 @@
-package Models;
+package Controller;
 
+import Models.Direction;
+import Models.actor.Actor;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 //Cuando se actualize el game screen tmb se actualizara el controller y decidira que hacer en base a los booleanos up down left right
-public class Controller extends InputAdapter {
+
+public class ControllerActor extends InputAdapter {
 
     private Actor actor;
 
     private boolean up, down, right, left;
 
-    public Controller(Actor actor) {
+    public ControllerActor(Actor actor) {
         this.actor = actor;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.W){
+        if (keycode == Input.Keys.W) {
             up = true;
 
         }
-        if(keycode == Input.Keys.S){
+        if (keycode == Input.Keys.S) {
             down = true;
 
         }
-        if(keycode == Input.Keys.D){
+        if (keycode == Input.Keys.D) {
             right = true;
 
         }
-        if(keycode == Input.Keys.A){
-           left = true;
+        if (keycode == Input.Keys.A) {
+            left = true;
 
         }
 
@@ -38,19 +41,19 @@ public class Controller extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.W){
+        if (keycode == Input.Keys.W) {
             up = false;
 
         }
-        if(keycode == Input.Keys.S){
+        if (keycode == Input.Keys.S) {
             down = false;
 
         }
-        if(keycode == Input.Keys.D){
+        if (keycode == Input.Keys.D) {
             right = false;
 
         }
-        if(keycode == Input.Keys.A){
+        if (keycode == Input.Keys.A) {
             left = false;
 
         }
@@ -60,35 +63,25 @@ public class Controller extends InputAdapter {
     }
 
     //Va a ir actualizando los frames segun la la direccion
-    public void update (float delta){
+    public void update(float delta) {
 
-        if (up){
+        if (up) {
             actor.move(Direction.NORTH);
             return;
         }
-        if (down){
+        if (down) {
             actor.move(Direction.SOUTH);
             return;
         }
-        if (left){
+        if (left) {
             actor.move(Direction.WEST);
             return;
         }
-        if (right){
+        if (right) {
             actor.move(Direction.EAST);
             return;
         }
 
 
     }
-
-
-
-
-
-
-
-
-
-
 }

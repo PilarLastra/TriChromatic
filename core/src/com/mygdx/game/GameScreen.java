@@ -1,11 +1,15 @@
 package com.mygdx.game;
 
-import Models.AnimationSet;
-import Models.Controller;
-import Models.Actor;
-import Models.Setting;
+
+import Controller.ControllerActor;
+import Controller.Interaction_Controller;
+import Models.*;
+import Models.actor.Actor;
+import Models.actor.Actor_Behavior;
+import Models.actor.LimitedWalkingBehavior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,6 +24,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
+
+import java.util.*;
 
 import static helper.Constante.PPM;
 
@@ -36,10 +42,22 @@ public class GameScreen extends ScreenAdapter {
 
     //PJ
     private Texture playerStandig;
-    private Controller controller;
+    private ControllerActor controller;
     private Actor pj;
 
+   // private Actor npc;
 
+   // private LimitedWalkingBehavior npc1;
+
+    private Interaction_Controller interactionController;
+
+
+    private List<LimitedWalkingBehavior> behaviors  = new ArrayList<LimitedWalkingBehavior>();
+
+    private List<Actor> npcs  = new ArrayList<Actor>();
+
+
+    private InputMultiplexer multiplexer;
 
 
     // Metodos //
@@ -67,12 +85,48 @@ public class GameScreen extends ScreenAdapter {
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
+
+
         //PJ
         playerStandig = new Texture ("PJ/pj0.png");
 
         pj = new Actor(1,1, animations);
 
-        controller = new Controller(pj);
+        controller = new ControllerActor(pj);
+
+        ///  npc
+
+        Random rnd = new Random();
+
+      //  npc = new Actor(8,5, animations);
+        Actor npc = new Actor(8,5,animations);
+
+        Actor npc2 = new Actor (8,1,animations);
+
+
+
+         ///le asigna comportamiento al npc
+
+         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,1,rnd);
+         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,0.5f,0.5f,0,1,rnd);
+
+         addNpc(npc);
+         addNpc(npc2);
+         addBehavior(behavior1);
+         addBehavior(behavior2);
+
+         multiplexer = new InputMultiplexer();
+
+
+        interactionController = new Interaction_Controller(pj, npcs);
+
+
+        multiplexer.addProcessor(0, controller);
+        multiplexer.addProcessor(1, interactionController);
+
+
+        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+
 
         }
 
@@ -80,7 +134,10 @@ public class GameScreen extends ScreenAdapter {
         return world;
     }
 
+
+
     private void update(float delta){
+
         float accel = 0;
 
         world.step(1/60f,6,2);
@@ -104,6 +161,16 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
     }
 
+    public void addBehavior(LimitedWalkingBehavior a) {
+
+
+        behaviors.add(a);
+    }
+
+    public void addNpc(Actor a) {
+        npcs.add(a);
+
+    }
 
 
     @Override
@@ -112,6 +179,20 @@ public class GameScreen extends ScreenAdapter {
         controller.update(delta);
 
         pj.update(delta);
+
+        for (Actor actor:
+                npcs) {
+            actor.update(delta);
+            behaviors.get(npcs.indexOf(actor)).update(delta);
+
+        }
+       /* npc.update(delta);
+        npc1.update(delta);
+
+        */
+
+
+
         update(Gdx.graphics.getDeltaTime());
 
 
@@ -122,31 +203,29 @@ public class GameScreen extends ScreenAdapter {
 
         box2DDebugRenderer.render(world,camera.combined.scl(PPM));
 
-
-
         batch.begin(); //renderiza objetos
 
-
-
         batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
-                Setting.SCALED_TILE_SIZE * 0.4f,Setting.SCALED_TILE_SIZE*0.5f);
+                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
 
+
+        for (Actor npc:
+             npcs) {batch.draw(npc.getSprite(), npc.getWorldX() * Setting.SCALED_TILE_SIZE , npc.getWorldY() * Setting.SCALED_TILE_SIZE,
+                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
+        }
 
         batch.end();
-
-
-
-
     }
 
 
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(controller);
 
-
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
+
+
 }
 
