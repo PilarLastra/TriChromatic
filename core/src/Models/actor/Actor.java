@@ -148,6 +148,17 @@ public class Actor {
     }
 
 
+    public boolean refaceWithoutAnimation(Direction dir) {
+        if (state != ACTOR_STATE.STANDING) { // can only reface when standing
+            return false;
+        }
+        this.facing = dir;
+        return true;
+    }
+
+    public Direction getFacing() {
+        return facing;
+    }
 
     public ACTOR_STATE getMovementState() {
         return state;

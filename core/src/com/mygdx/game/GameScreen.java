@@ -2,13 +2,14 @@ package com.mygdx.game;
 
 
 import Controller.ControllerActor;
+import Controller.Interaction_Controller;
 import Models.*;
 import Models.actor.Actor;
-import Models.actor.ActorObserver;
 import Models.actor.Actor_Behavior;
 import Models.actor.LimitedWalkingBehavior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,9 +25,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static helper.Constante.PPM;
 
@@ -48,14 +47,19 @@ public class GameScreen extends ScreenAdapter {
 
     private Actor npc;
 
-    private HashMap<Actor, Actor_Behavior> brains;
+    private HashMap<Actor, Actor_Behavior> brains = new HashMap<Actor, Actor_Behavior>();
 
     private LimitedWalkingBehavior npc1;
 
+    private Interaction_Controller interactionController;
 
-    private List<Actor> actors;
+    private TileMap map;
 
 
+    private List<Actor> actors  = new ArrayList<Actor>();
+
+
+    private InputMultiplexer multiplexer;
 
 
     // Metodos //
@@ -83,6 +87,8 @@ public class GameScreen extends ScreenAdapter {
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
+
+
         //PJ
         playerStandig = new Texture ("PJ/pj0.png");
 
@@ -96,9 +102,21 @@ public class GameScreen extends ScreenAdapter {
 
          npc = new Actor(8,5, animations);
 
+
+
          ///le asigna comportamiento al npc
 
-         npc1 = new LimitedWalkingBehavior(npc, 1,1,1,1,0,1,rnd);
+         npc1 = new LimitedWalkingBehavior(npc, 1,1,1,1,0,5,rnd);
+
+         addActor(npc, npc1);
+
+         multiplexer = new InputMultiplexer();
+
+
+        interactionController = new Interaction_Controller(pj, npc);
+
+        multiplexer.addProcessor(0, controller);
+        multiplexer.addProcessor(1, interactionController);
 
 
         box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
@@ -139,6 +157,7 @@ public class GameScreen extends ScreenAdapter {
 
     public void addActor(Actor a) {
 
+      // map.getTile(a.getX(),a.getY()).setActor(a);
         actors.add(a);
     }
 
@@ -146,8 +165,6 @@ public class GameScreen extends ScreenAdapter {
         addActor(a);
         brains.put(a, b);
     }
-
-
 
 
     @Override
@@ -194,10 +211,11 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(controller);
 
-
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
+
+
 }
 
