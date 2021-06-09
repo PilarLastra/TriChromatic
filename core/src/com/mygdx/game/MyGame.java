@@ -30,6 +30,7 @@ public class MyGame extends Game {
 	public void create () {
 		assetManager = new AssetManager();
 		assetManager.load("PJ/player.atlas", TextureAtlas.class);
+		assetManager.load("PJ/PixiPili.atlas",TextureAtlas.class);
 		assetManager.finishLoading();
 
 		this.widthScreen = Gdx.graphics.getWidth();

@@ -70,35 +70,58 @@ public class ControllerActor extends InputAdapter {
 
     }
 
-
+ //de esta manera no se puede caminar de forma diagonal
     public void inputUpdateD (float delta)
     {
         int horizontalForce =0;
+        int verticalForce =0;
+        body.setLinearVelocity(0,0);
+        if(up){
+            verticalForce+=1;
+            actor.move(Direction.NORTH);
+            body.setLinearVelocity(body.getLinearVelocity().x, verticalForce * 2);
+            return;
 
+        }
+        if(down) {
+            verticalForce -= 1;
+            actor.move(Direction.SOUTH);
+            body.setLinearVelocity(body.getLinearVelocity().x, verticalForce * 2);
+            return;
+        }
         if(right){
             horizontalForce +=1;
             actor.move(Direction.EAST);
+            body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
+            return;
         }
-        if(left){
-            actor.move(Direction.WEST);
-        horizontalForce -=1;
-
-    }
-        body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
-
+         if(left){
+             horizontalForce -=1;
+             actor.move(Direction.WEST);
+             body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
+             return;
     }
 
+    }
+/*
     public void inputUpdateW (float delta){
         int verticalForce =0;
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             verticalForce+=1;
             actor.move(Direction.NORTH);
+
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             verticalForce -= 1;
             actor.move(Direction.SOUTH);
         }
-        body.setLinearVelocity(body.getLinearVelocity().x, verticalForce*2);
+
+
+
     }
+
+ */
+
+
 
 }

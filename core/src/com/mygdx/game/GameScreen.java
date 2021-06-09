@@ -72,17 +72,32 @@ public class GameScreen extends ScreenAdapter {
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
-        TextureAtlas atlas = MyGame.INSTANCE.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
+        TextureAtlas atlasPj = MyGame.INSTANCE.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
+
         //Se divide por dos pq se estima que x tile va a dar dos pasos
-        AnimationSet animations = new AnimationSet(
-                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
-                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
-                new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
-        new Animation<TextureRegion>(0.3f / 2f, atlas.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
-                atlas.findRegion("dawn_stand_north"),
-                atlas.findRegion("dawn_stand_south"),
-                atlas.findRegion("dawn_stand_east"),
-                atlas.findRegion("dawn_stand_west"));
+        AnimationSet animationsPJ = new AnimationSet(
+                new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
+        new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
+                atlasPj.findRegion("dawn_stand_north"),
+                atlasPj.findRegion("dawn_stand_south"),
+                atlasPj.findRegion("dawn_stand_east"),
+                atlasPj.findRegion("dawn_stand_west"));
+
+        TextureAtlas atlasNPC = MyGame.INSTANCE.getAssetManager().get("PJ/PixiPili.atlas",TextureAtlas.class);
+
+       AnimationSet animationsNPC = new AnimationSet(
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_norte"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_frente"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_oeste"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_este"), Animation.PlayMode.LOOP_PINGPONG),
+                atlasNPC.findRegion("stand_norte"),
+                atlasNPC.findRegion("stand frente"),
+                atlasNPC.findRegion("stand_oeste"),
+                atlasNPC.findRegion("stand_este"));
+
+
 
 
         this.tiledMapHelper = new TiledMapHelper(this);
@@ -91,32 +106,31 @@ public class GameScreen extends ScreenAdapter {
 
 
         //PJ
-        playerStandig = new Texture ("PJ/pj0.png");
+      // playerStandig = new Texture ("PJ/pj0.png");
 
-        pj = new Actor(1/PPM,70/PPM, animations,this,false);
+        pj = new Actor(20/PPM,70/PPM, animationsPJ,this,false);
 
         controller = new ControllerActor(pj);
 
         ///  npc
 
         Random rnd = new Random();
-
-       // npc = new Actor(8/PPM,150/PPM, animations,this);
-        Actor npc = new Actor(500/PPM,150/PPM, animations,this,true);
-
-        Actor npc2 = new Actor (400/PPM,100/PPM, animations,this,true);
-
-
+        Actor npc = new Actor(500/PPM,150/PPM, animationsNPC,this,true);
+       // Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC,this,true);
 
          ///le asigna comportamiento al npc
 
-         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,1,rnd);
-         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,1,rnd);
+         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,2,rnd);
+       //  LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
 
          addNpc(npc);
-         addNpc(npc2);
+       //  addNpc(npc2);
          addBehavior(behavior1);
-         addBehavior(behavior2);
+       //  addBehavior(behavior2);
+
+
+
+
 
 
 
@@ -130,7 +144,7 @@ public class GameScreen extends ScreenAdapter {
         multiplexer.addProcessor(1, interactionController);
 
 
-       // box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
 
         }
@@ -143,7 +157,6 @@ public class GameScreen extends ScreenAdapter {
 
     private void update(float delta){
 
-        float accel = 0;
 
         world.step(1/60f,6,2);
         cameraUpdate();
@@ -181,7 +194,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
-        controller.inputUpdateW(delta);
+       // controller.inputUpdateW(delta);
         controller.inputUpdateD(delta);
 
         pj.update(delta);
@@ -206,14 +219,16 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(pj.getSprite(),  pj.getBody().getPosition().x*PPM, pj.getBody().getPosition().y*PPM,
+        batch.draw(pj.getSprite(),  pj.getBody().getPosition().x*PPM-10, pj.getBody().getPosition().y*PPM-10,
                 17, 24);
 
 
         for (Actor npc:
-             npcs) {batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM, npc.getBody().getPosition().y*PPM,
+             npcs) {batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM-10, npc.getBody().getPosition().y*PPM-10,
                 17, 24);
         }
+
+
 
         batch.end();
     }

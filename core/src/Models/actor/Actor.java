@@ -57,11 +57,11 @@ public class Actor {
     }
 
     public float getX() {
-        return x+1;
+        return x;
     }
 
     public float getY() {
-        return y+1;
+        return y;
     }
 
     public float getWorldX() {
@@ -140,8 +140,8 @@ public class Actor {
 //Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
     private void initializeMove(Direction dir){
         this.facing = dir;
-        this.srcX = x*PPM;
-        this.srcY = y*PPM;
+        this.srcX = x;
+        this.srcY = y;
         this.bodyX=x;
         this.bodyY=y;
         this.destX= x + dir.getDx();

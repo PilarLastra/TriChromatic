@@ -1,0 +1,118 @@
+
+PixiPili.png
+size: 256, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+camina_este
+  rotate: false
+  xy: 38, 144
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 3
+camina_este
+  rotate: false
+  xy: 38, 92
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 2
+camina_este
+  rotate: false
+  xy: 108, 144
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 1
+camina_frente
+  rotate: false
+  xy: 38, 196
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 6
+  index: 1
+camina_frente
+  rotate: false
+  xy: 2, 88
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 6
+  index: 3
+camina_frente
+  rotate: false
+  xy: 142, 198
+  size: 34, 48
+  orig: 64, 64
+  offset: 15, 8
+  index: 2
+camina_norte
+  rotate: false
+  xy: 2, 194
+  size: 34, 52
+  orig: 64, 64
+  offset: 15, 4
+  index: 3
+camina_norte
+  rotate: false
+  xy: 2, 140
+  size: 34, 52
+  orig: 64, 64
+  offset: 15, 4
+  index: 1
+camina_norte
+  rotate: false
+  xy: 72, 146
+  size: 34, 48
+  orig: 64, 64
+  offset: 15, 8
+  index: 2
+camina_oeste
+  rotate: false
+  xy: 2, 36
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 1
+camina_oeste
+  rotate: false
+  xy: 72, 94
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 3
+camina_oeste
+  rotate: false
+  xy: 142, 146
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: 2
+stand frente
+  rotate: false
+  xy: 214, 199
+  size: 34, 47
+  orig: 64, 64
+  offset: 15, 9
+  index: -1
+stand_este
+  rotate: false
+  xy: 74, 196
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: -1
+stand_norte
+  rotate: false
+  xy: 178, 198
+  size: 34, 48
+  orig: 64, 64
+  offset: 15, 8
+  index: -1
+stand_oeste
+  rotate: false
+  xy: 108, 196
+  size: 32, 50
+  orig: 64, 64
+  offset: 16, 6
+  index: -1

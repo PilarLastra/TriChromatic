@@ -1,6 +1,8 @@
 package Models.actor;
 
 import Models.Direction;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -55,7 +57,10 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
             boolean moved = getActor().move(moveDirection);
 
             if (moved) {
-                moveNpc(moveDirection);
+                if (moveDirection == Direction.EAST || moveDirection == Direction.WEST)
+                    moveNpcD(moveDirection);
+                else
+                    moveNpcW(moveDirection);
 
                 //this.dy += moveDirection.getDy();
 
@@ -67,7 +72,7 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
         }
     }
 
-    public void moveNpc (Direction direction){
+    public void moveNpcD (Direction direction){
         int horizontalForce =0;
 
         if(direction == Direction.EAST){
@@ -79,6 +84,19 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
             horizontalForce -=1;
         }
         npcBody.setLinearVelocity(horizontalForce * 2, npcBody.getLinearVelocity().y);
+    }
+
+    public void moveNpcW (Direction direction) {
+        int verticalForce = 0;
+        if (direction == Direction.NORTH) {
+            verticalForce += 1;
+            getActor().move(Direction.NORTH);
+        }
+        if (direction == Direction.SOUTH) {
+            verticalForce -= 1;
+            getActor().move(Direction.SOUTH);
+        }
+        npcBody.setLinearVelocity(npcBody.getLinearVelocity().x, verticalForce * 2);
     }
 
     private float calculateWaitTime() {
