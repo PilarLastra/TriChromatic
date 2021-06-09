@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
@@ -45,9 +46,11 @@ public class GameScreen extends ScreenAdapter {
     private ControllerActor controller;
     private Actor pj;
 
-   // private Actor npc;
 
-   // private LimitedWalkingBehavior npc1;
+
+    private Actor npc;
+
+    private LimitedWalkingBehavior npc1;
 
     private Interaction_Controller interactionController;
 
@@ -90,7 +93,7 @@ public class GameScreen extends ScreenAdapter {
         //PJ
         playerStandig = new Texture ("PJ/pj0.png");
 
-        pj = new Actor(1,1, animations);
+        pj = new Actor(1/PPM,70/PPM, animations,this,false);
 
         controller = new ControllerActor(pj);
 
@@ -98,22 +101,24 @@ public class GameScreen extends ScreenAdapter {
 
         Random rnd = new Random();
 
-      //  npc = new Actor(8,5, animations);
-        Actor npc = new Actor(8,5,animations);
+       // npc = new Actor(8/PPM,150/PPM, animations,this);
+        Actor npc = new Actor(500/PPM,150/PPM, animations,this,true);
 
-        Actor npc2 = new Actor (8,1,animations);
+        Actor npc2 = new Actor (400/PPM,100/PPM, animations,this,true);
 
 
 
          ///le asigna comportamiento al npc
 
          LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,1,rnd);
-         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,0.5f,0.5f,0,1,rnd);
+         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,1,rnd);
 
          addNpc(npc);
          addNpc(npc2);
          addBehavior(behavior1);
          addBehavior(behavior2);
+
+
 
          multiplexer = new InputMultiplexer();
 
@@ -125,7 +130,7 @@ public class GameScreen extends ScreenAdapter {
         multiplexer.addProcessor(1, interactionController);
 
 
-        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+       // box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
 
         }
@@ -157,7 +162,7 @@ public class GameScreen extends ScreenAdapter {
 
     //Para que la camara siga al jugador
     private void cameraUpdate(){
-        camera.position.set(new Vector3(pj.getWorldX()* Setting.SCALED_TILE_SIZE,pj.getWorldY()* Setting.SCALED_TILE_SIZE,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
+        camera.position.set(new Vector3(pj.getBody().getPosition().x*PPM,pj.getBody().getPosition().y*PPM,0)); //Para libgdx el 0,0,0 del objeto camera esta abajo a la izquierda
         camera.update();
     }
 
@@ -176,7 +181,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
-        controller.update(delta);
+        controller.inputUpdateW(delta);
+        controller.inputUpdateD(delta);
 
         pj.update(delta);
 
@@ -186,11 +192,6 @@ public class GameScreen extends ScreenAdapter {
             behaviors.get(npcs.indexOf(actor)).update(delta);
 
         }
-       /* npc.update(delta);
-        npc1.update(delta);
-
-        */
-
 
 
         update(Gdx.graphics.getDeltaTime());
@@ -205,13 +206,13 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
-        batch.draw(pj.getSprite(), pj.getWorldX() * Setting.SCALED_TILE_SIZE , pj.getWorldY() * Setting.SCALED_TILE_SIZE,
-                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
+        batch.draw(pj.getSprite(),  pj.getBody().getPosition().x*PPM, pj.getBody().getPosition().y*PPM,
+                17, 24);
 
 
         for (Actor npc:
-             npcs) {batch.draw(npc.getSprite(), npc.getWorldX() * Setting.SCALED_TILE_SIZE , npc.getWorldY() * Setting.SCALED_TILE_SIZE,
-                Setting.SCALED_TILE_SIZE * 0.4f, Setting.SCALED_TILE_SIZE*0.5f);
+             npcs) {batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM, npc.getBody().getPosition().y*PPM,
+                17, 24);
         }
 
         batch.end();

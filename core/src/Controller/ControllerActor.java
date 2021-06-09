@@ -2,8 +2,11 @@ package Controller;
 
 import Models.Direction;
 import Models.actor.Actor;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 //Cuando se actualize el game screen tmb se actualizara el controller y decidira que hacer en base a los booleanos up down left right
 
@@ -11,11 +14,16 @@ public class ControllerActor extends InputAdapter {
 
     private Actor actor;
 
-    private boolean up, down, right, left;
+    private Body body;
+
+    private boolean up, down, left, right;
+
 
     public ControllerActor(Actor actor) {
         this.actor = actor;
+        this.body = actor.getBody();
     }
+
 
     @Override
     public boolean keyDown(int keycode) {
@@ -62,26 +70,35 @@ public class ControllerActor extends InputAdapter {
 
     }
 
-    //Va a ir actualizando los frames segun la la direccion
-    public void update(float delta) {
 
-        if (up) {
-            actor.move(Direction.NORTH);
-            return;
-        }
-        if (down) {
-            actor.move(Direction.SOUTH);
-            return;
-        }
-        if (left) {
-            actor.move(Direction.WEST);
-            return;
-        }
-        if (right) {
+    public void inputUpdateD (float delta)
+    {
+        int horizontalForce =0;
+
+        if(right){
+            horizontalForce +=1;
             actor.move(Direction.EAST);
-            return;
         }
-
+        if(left){
+            actor.move(Direction.WEST);
+        horizontalForce -=1;
 
     }
+        body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
+
+    }
+
+    public void inputUpdateW (float delta){
+        int verticalForce =0;
+        if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            verticalForce+=1;
+            actor.move(Direction.NORTH);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+            verticalForce -= 1;
+            actor.move(Direction.SOUTH);
+        }
+        body.setLinearVelocity(body.getLinearVelocity().x, verticalForce*2);
+    }
+
 }
