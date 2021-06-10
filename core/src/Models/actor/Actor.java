@@ -2,10 +2,16 @@ package Models.actor;
 
 import Models.AnimationSet;
 import Models.Direction;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mygdx.game.GameScreen;
 import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Interpolation;
+
+import static helper.Constante.PPM;
 
 //Le cambie el nombre de player a actor pq puede haber mas actores en pantalla
 public class Actor {
@@ -16,6 +22,8 @@ public class Actor {
 
     private float worldX, worldY;
 
+    private float bodyX,bodyY;
+
     private float srcX, srcY; //origen
     private float destX, destY; //destino
     private float animTimer;
@@ -24,22 +32,27 @@ public class Actor {
     private float walkTimer; //Se nececita sabes cuanto tiempo lleva el actor caminando ya que si da un "paso" la animacion sera diferente a si camina dos tiles enteros
     private boolean moveRequestThisFrame;
 
+    private Body player;
 
     private ACTOR_STATE state; //Para saber el estado actual del actor
 
     private AnimationSet animations;
 
+    private GameScreen gameScreen;
+
 
 
 // Metodos //
 
-    public Actor(float x, float y, AnimationSet animations) {
+    public Actor(float x, float y, AnimationSet animations, GameScreen gameScreen, boolean isNPC) {
         this.x = x;
         this.y = y;
         this.worldX = x;
         this.worldY = y;
         this.animations = animations;
         this.state = ACTOR_STATE.STANDING;
+        this.gameScreen = gameScreen;
+        this.player = crearPlayer(isNPC);
         this.facing = Direction.SOUTH; //Despues se sobrescribe
     }
 
@@ -109,7 +122,8 @@ public class Actor {
         }
 
         // No se va de los limites del mapa sa sa saaaaaaaaaaaaaaaaaa
-        if( x+ dir.getDx() <0 || x + dir.getDx() >= Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
+        if(player.getPosition().x <0 || player.getPosition().x + dir.getDx() >= Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
+
             return false;
         }
         initializeMove(dir);
@@ -128,6 +142,8 @@ public class Actor {
         this.facing = dir;
         this.srcX = x;
         this.srcY = y;
+        this.bodyX=x;
+        this.bodyY=y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
         this.worldX = x;
@@ -166,31 +182,32 @@ public class Actor {
     }
 
 
+    public Body getBody() {
+        return player;
+    }
 
-
-/*
-    public Body crearPlayer() {
-
-        playerStatus = new PlayerStatus(1, 3);
+    public Body crearPlayer(boolean isNPC) {
 
         BodyDef playerbody = new BodyDef();
-        playerbody.position.x = playerStatus.position.x;
-        playerbody.position.y = playerStatus.position.y;
-        playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
-
+        playerbody.position.x = getX();
+        playerbody.position.y = getY();
+        if (isNPC)
+            playerbody.type = BodyDef.BodyType.KinematicBody; //Un objeto kinematico se mueve pero no es afectado por otros objetos
+        else
+            playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
+        playerbody.fixedRotation = true;
         Body body = gameScreen.getWorld().createBody(playerbody);
-
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerStatus.WIDTH, playerStatus.HEIGHT);
-
-        body.createFixture(shape, 1000);
-        body.setUserData(playerStatus);
-
+        shape.setAsBox(17/2/PPM, 24/2/PPM);
+        body.createFixture(shape, 1.0F);
         shape.dispose();
 
         return body;
 
     }
-    */
+
+
+
+
 
 }
