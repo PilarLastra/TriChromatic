@@ -16,9 +16,12 @@ public class MyGame extends Game {
 	public static MyGame INSTANCE;
 
 	private int widthScreen, heightScreen;
-	private OrthographicCamera orthographicCamera;
+
+	private OrthographicCamera orthographicCamera, putos;
 
 	private AssetManager assetManager;
+
+	private GameScreen screen;
 
 
 	// Metodos //
@@ -36,10 +39,21 @@ public class MyGame extends Game {
 		this.widthScreen = Gdx.graphics.getWidth();
 		this.heightScreen = Gdx.graphics.getHeight();
 		this.orthographicCamera = new OrthographicCamera();
+		this.putos = new OrthographicCamera();
 		this.orthographicCamera.setToOrtho(false, widthScreen, heightScreen);
-		setScreen(new GameScreen(orthographicCamera));
+		setScreen(screen = new GameScreen(orthographicCamera));
 
 
+
+	}
+
+	public void screenPrincipa ()
+	{
+		setScreen(screen);
+	}
+
+	public void newScreen (){
+		setScreen(new GameScreen(putos));
 	}
 
 	public AssetManager getAssetManager() {

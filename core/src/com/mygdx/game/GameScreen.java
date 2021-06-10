@@ -7,10 +7,12 @@ import Models.*;
 import Models.actor.Actor;
 import Models.actor.Actor_Behavior;
 import Models.actor.LimitedWalkingBehavior;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +28,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import helper.TiledMapHelper;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static helper.Constante.PPM;
 
@@ -38,6 +42,8 @@ public class GameScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
 
+    private Vector3 touchPoint;
+
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private TiledMapHelper tiledMapHelper;
 
@@ -45,7 +51,6 @@ public class GameScreen extends ScreenAdapter {
     private Texture playerStandig;
     private ControllerActor controller;
     private Actor pj;
-
 
 
     private Actor npc;
@@ -71,6 +76,7 @@ public class GameScreen extends ScreenAdapter {
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0),false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
+        touchPoint = new Vector3();
 
         TextureAtlas atlasPj = MyGame.INSTANCE.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
 
@@ -116,17 +122,17 @@ public class GameScreen extends ScreenAdapter {
 
         Random rnd = new Random();
         Actor npc = new Actor(500/PPM,150/PPM, animationsNPC,this,true);
-       // Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC,this,true);
+        Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC,this,true);
 
          ///le asigna comportamiento al npc
 
          LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,2,rnd);
-       //  LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
+         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
 
          addNpc(npc);
-       //  addNpc(npc2);
+         addNpc(npc2);
          addBehavior(behavior1);
-       //  addBehavior(behavior2);
+         addBehavior(behavior2);
 
 
 
@@ -167,10 +173,19 @@ public class GameScreen extends ScreenAdapter {
 
 
 
+
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             Gdx.app.exit(); //Si apretas escape se cierra
         }
 
+    }
+
+    public void updatePause (){
+       // if (Gdx.input.justTouched()){
+            camera.unproject(touchPoint.set((float)Gdx.input.getX(), (float) Gdx.input.getY(),0));
+
+
+       // }
     }
 
     //Para que la camara siga al jugador
@@ -209,6 +224,14 @@ public class GameScreen extends ScreenAdapter {
 
         update(Gdx.graphics.getDeltaTime());
 
+        if(Gdx.input.isKeyPressed(Input.Keys.F9)){
+            MyGame.INSTANCE.newScreen();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.F8)) {
+            MyGame.INSTANCE.screenPrincipa();
+        }
+
+
 
         Gdx.gl.glClearColor(0,0,0,1); //Limpia la pantalla color seteado = Negro
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -232,7 +255,6 @@ public class GameScreen extends ScreenAdapter {
 
         batch.end();
     }
-
 
 
     @Override
