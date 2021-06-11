@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+
+
 public class MyGame extends Game {
 
 	public static MyGame INSTANCE;
@@ -22,6 +24,8 @@ public class MyGame extends Game {
 	private AssetManager assetManager;
 
 	private GameScreen screen;
+
+
 
 
 	// Metodos //
@@ -61,6 +65,10 @@ public class MyGame extends Game {
 	}
 
 
+	@Override
+	public void render() {
+
+	}
 
 	@Override
 	public void dispose () {

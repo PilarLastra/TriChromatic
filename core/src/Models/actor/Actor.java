@@ -27,7 +27,7 @@ public class Actor {
     private float srcX, srcY; //origen
     private float destX, destY; //destino
     private float animTimer;
-    private float ANIM_TIMER = 0.3f; //Tiempo que dura la animacion
+    private float ANIM_TIMER = 0.1f; //Tiempo que dura la animacion
 
     private float walkTimer; //Se nececita sabes cuanto tiempo lleva el actor caminando ya que si da un "paso" la animacion sera diferente a si camina dos tiles enteros
     private boolean moveRequestThisFrame;
@@ -198,7 +198,10 @@ public class Actor {
         playerbody.fixedRotation = true;
         Body body = gameScreen.getWorld().createBody(playerbody);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(17/2/PPM, 24/2/PPM);
+        if (isNPC)
+            shape.setAsBox(17/4/PPM, 24/4/PPM);
+        else
+            shape.setAsBox(17/2/PPM, 24/2/PPM);
         body.createFixture(shape, 1.0F);
         shape.dispose();
 

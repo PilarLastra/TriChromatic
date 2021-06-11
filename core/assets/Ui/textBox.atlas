@@ -1,0 +1,13 @@
+
+textBox.png
+size: 256, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+text_box_naranja
+  rotate: false
+  xy: 2, 2
+  size: 165, 224
+  orig: 204, 266
+  offset: 23, 16
+  index: -1

@@ -8,6 +8,7 @@ import Models.actor.Actor;
 import Models.actor.Actor_Behavior;
 import Models.actor.LimitedWalkingBehavior;
 
+import UI.DialogueBox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -26,6 +27,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import helper.TiledMapHelper;
 
 import java.awt.*;
@@ -46,6 +51,14 @@ public class GameScreen extends ScreenAdapter {
 
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private TiledMapHelper tiledMapHelper;
+
+    //UI
+
+    private int uiScale = 2;
+
+    private Stage uiStage;
+    private Table root;
+    private DialogueBox dialogueBox;
 
     //PJ
     private Texture playerStandig;
@@ -109,9 +122,10 @@ public class GameScreen extends ScreenAdapter {
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
 
+        //UI
+        initUI();
 
-
-        //PJ
+        // PJ
       // playerStandig = new Texture ("PJ/pj0.png");
 
         pj = new Actor(20/PPM,70/PPM, animationsPJ,this,false);
@@ -261,6 +275,24 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
 
         Gdx.input.setInputProcessor(multiplexer);
+
+    }
+
+    private void initUI(){
+        uiStage = new Stage (new ScreenViewport());
+        uiStage.getViewport().update(Gdx.graphics.getWidth()/uiScale, Gdx.graphics.getHeight() / uiScale, true);
+
+        //Dialogue setUp
+
+        root = new Table();
+        root.setFillParent(true);
+        uiStage.addActor(root);
+
+        dialogueBox = new DialogueBox();
+        dialogueBox.animateText("Holandaaaaaaa");
+
+        root.add(dialogueBox).expand().align(Align.bottom).pad(8f);
+
 
     }
 
