@@ -182,6 +182,14 @@ public class Actor {
     }
 
 
+    public void setBodyX(float bodyX) {
+        this.bodyX = bodyX;
+    }
+
+    public void setBodyY(float bodyY) {
+        this.bodyY = bodyY;
+    }
+
     public Body getBody() {
         return player;
     }

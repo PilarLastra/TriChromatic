@@ -26,9 +26,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.google.gson.stream.JsonReader;
 import helper.TiledMapHelper;
+import com.google.gson.Gson;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -46,6 +52,12 @@ public class GameScreen extends ScreenAdapter {
 
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private TiledMapHelper tiledMapHelper;
+
+    // Archivo
+
+    private Gson gson;
+    private FileWriter savefile;
+    private JsonReader reader;
 
     //PJ
     private Texture playerStandig;
@@ -172,9 +184,40 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
 
 
+        if(Gdx.input.isKeyPressed(Input.Keys.F8)){
+            gson = new Gson();
+            try {
+                reader = new JsonReader(new FileReader("saveFile.json"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Vector2 vectorsito = gson.fromJson(reader, Vector2.class);
+            pj.getBody().setTransform(vectorsito, 0);
+        }
 
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            try {
+                savefile = new FileWriter("saveFile.json");
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            gson = new Gson();
+
+            gson.toJson(pj.getBody().getPosition(), savefile);
+            try {
+                savefile.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                savefile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Gdx.app.exit(); //Si apretas escape se cierra
         }
 
