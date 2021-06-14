@@ -35,11 +35,7 @@ public class Interaction_Controller extends InputAdapter {
         if (keycode == Input.Keys.X) {
             for (Actor npc : npcs){
                 if (isCloseNpc(npc)){
-                    System.out.println("estoy teniendo un dialogo");
                     if (npc.refaceWithoutAnimation(Direction.getOpposite(player.getFacing()))) {
-
-                        System.out.println("TE MIRO");
-                        System.out.println("\n\n");
                         break;
                     }
                 }
@@ -67,7 +63,7 @@ public class Interaction_Controller extends InputAdapter {
         if(Math.round(bodyPJ.getWorldCenter().y*10f)/10f == Math.round((door.getBody().getWorldCenter().y +0.8f)*10f)/10f && Math.round(bodyPJ.getWorldCenter().x) == Math.round(door.getBody().getWorldCenter().x)) {
             return true;
         }
-        if (Math.round(bodyPJ.getWorldCenter().y * 10f) / 10f == Math.round((door.getBody().getWorldCenter().y - 0.7f) * 10f) / 10f && Math.round(bodyPJ.getWorldCenter().x) == Math.round(door.getBody().getWorldCenter().x)){
+        if (Math.round(bodyPJ.getWorldCenter().y * 10f) / 10f == Math.round((door.getBody().getWorldCenter().y - 0.8f) * 10f) / 10f && Math.round(bodyPJ.getWorldCenter().x) == Math.round(door.getBody().getWorldCenter().x)){
             return true;
         }
         return false;

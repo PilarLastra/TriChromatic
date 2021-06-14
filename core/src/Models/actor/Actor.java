@@ -2,10 +2,10 @@ package Models.actor;
 
 import Models.AnimationSet;
 import Models.Direction;
+import Screens.GameScreen;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mygdx.game.GameScreen;
 import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -194,7 +194,12 @@ public class Actor {
         playerbody.fixedRotation = true;
         player = gameScreen.getWorld().createBody(playerbody);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(17/2/PPM, 24/2/PPM);
+        if(isNPC) {
+            shape.setAsBox(17 / 4 / PPM, 24 / 4 / PPM);
+        }
+        else{
+            shape.setAsBox(17 / 2 / PPM, 24 / 2 / PPM);
+        }
         player.createFixture(shape, 1.0F);
         shape.dispose();
 
