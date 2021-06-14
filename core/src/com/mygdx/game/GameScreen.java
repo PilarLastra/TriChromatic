@@ -124,7 +124,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         //PJ
-      // playerStandig = new Texture ("PJ/pj0.png");
+        // playerStandig = new Texture ("PJ/pj0.png");
 
         pj = new Actor(20/PPM,70/PPM, animationsPJ,this,false);
 
@@ -136,7 +136,11 @@ public class GameScreen extends ScreenAdapter {
         Actor npc = new Actor(500/PPM,150/PPM, animationsNPC,this,true);
         Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC,this,true);
 
-         ///le asigna comportamiento al npc
+        /// puerta
+
+        Door door = new Door(577/PPM, 139/PPM, this);
+
+        ///le asigna comportamiento al npc
 
          LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,2,rnd);
          LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
@@ -151,18 +155,17 @@ public class GameScreen extends ScreenAdapter {
 
 
 
-
          multiplexer = new InputMultiplexer();
 
 
-        interactionController = new Interaction_Controller(pj, npcs);
+        interactionController = new Interaction_Controller(pj, npcs, door);
 
 
         multiplexer.addProcessor(0, controller);
         multiplexer.addProcessor(1, interactionController);
 
 
-        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+        //box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
 
         }
@@ -257,8 +260,7 @@ public class GameScreen extends ScreenAdapter {
 
         pj.update(delta);
 
-        for (Actor actor:
-                npcs) {
+        for (Actor actor: npcs) {
             actor.update(delta);
             behaviors.get(npcs.indexOf(actor)).update(delta);
 
@@ -285,13 +287,17 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin(); //renderiza objetos
 
+
+
         batch.draw(pj.getSprite(),  pj.getBody().getPosition().x*PPM-10, pj.getBody().getPosition().y*PPM-10,
                 17, 24);
 
 
-        for (Actor npc:
-             npcs) {batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM-10, npc.getBody().getPosition().y*PPM-10,
-                17, 24);
+
+
+
+        for (Actor npc: npcs) {
+            batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM-10, npc.getBody().getPosition().y*PPM-10, 17, 24);
         }
 
 

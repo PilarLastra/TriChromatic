@@ -22,12 +22,11 @@ public class Actor {
 
     private float worldX, worldY;
 
-    private float bodyX,bodyY;
 
     private float srcX, srcY; //origen
     private float destX, destY; //destino
     private float animTimer;
-    private float ANIM_TIMER = 0.3f; //Tiempo que dura la animacion
+    private float ANIM_TIMER = 0.1f; //Tiempo que dura la animacion
 
     private float walkTimer; //Se nececita sabes cuanto tiempo lleva el actor caminando ya que si da un "paso" la animacion sera diferente a si camina dos tiles enteros
     private boolean moveRequestThisFrame;
@@ -142,8 +141,6 @@ public class Actor {
         this.facing = dir;
         this.srcX = x;
         this.srcY = y;
-        this.bodyX=x;
-        this.bodyY=y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
         this.worldX = x;
@@ -181,15 +178,6 @@ public class Actor {
         return state;
     }
 
-
-    public void setBodyX(float bodyX) {
-        this.bodyX = bodyX;
-    }
-
-    public void setBodyY(float bodyY) {
-        this.bodyY = bodyY;
-    }
-
     public Body getBody() {
         return player;
     }
@@ -204,13 +192,13 @@ public class Actor {
         else
             playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
         playerbody.fixedRotation = true;
-        Body body = gameScreen.getWorld().createBody(playerbody);
+        player = gameScreen.getWorld().createBody(playerbody);
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(17/2/PPM, 24/2/PPM);
-        body.createFixture(shape, 1.0F);
+        player.createFixture(shape, 1.0F);
         shape.dispose();
 
-        return body;
+        return player;
 
     }
 
