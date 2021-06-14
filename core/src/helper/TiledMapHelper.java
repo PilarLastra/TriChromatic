@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.GameScreen;
@@ -35,9 +36,9 @@ public class TiledMapHelper {
 
 
 
-    public OrthogonalTiledMapRenderer setupMap(){
+    public OrthogonalTiledMapRenderer setupMap(String path){
 
-        tiledMap = new TmxMapLoader().load("maps/Mapa1.tmx");
+        tiledMap = new TmxMapLoader().load(path);
         parseMapObjects(tiledMap.getLayers().get("Objetos").getObjects());
         return new OrthogonalTiledMapRenderer(tiledMap);
 

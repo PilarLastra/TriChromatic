@@ -4,15 +4,13 @@ package com.mygdx.game;
 import Controller.ControllerActor;
 import Controller.Interaction_Controller;
 import Models.*;
+import Models.ObjetosEstaticos.Door;
 import Models.actor.Actor;
-import Models.actor.Actor_Behavior;
 import Models.actor.LimitedWalkingBehavior;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,14 +21,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.google.gson.stream.JsonReader;
 import helper.TiledMapHelper;
 import com.google.gson.Gson;
-
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -97,7 +92,7 @@ public class GameScreen extends ScreenAdapter {
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
-        new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_west"), Animation.PlayMode.LOOP_PINGPONG),
                 atlasPj.findRegion("dawn_stand_north"),
                 atlasPj.findRegion("dawn_stand_south"),
                 atlasPj.findRegion("dawn_stand_east"),
@@ -105,7 +100,7 @@ public class GameScreen extends ScreenAdapter {
 
         TextureAtlas atlasNPC = MyGame.INSTANCE.getAssetManager().get("PJ/PixiPili.atlas",TextureAtlas.class);
 
-       AnimationSet animationsNPC = new AnimationSet(
+        AnimationSet animationsNPC = new AnimationSet(
                 new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_norte"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_frente"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasNPC.findRegions("camina_oeste"), Animation.PlayMode.LOOP_PINGPONG),
@@ -119,7 +114,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         this.tiledMapHelper = new TiledMapHelper(this);
-        this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap();
+        this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap("maps/Mapa1.tmx");
 
 
 
@@ -142,20 +137,20 @@ public class GameScreen extends ScreenAdapter {
 
         ///le asigna comportamiento al npc
 
-         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,2,rnd);
-         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
+        LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0,0,0,2,rnd);
+        LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0,0,1,1,0,2,rnd);
 
-         addNpc(npc);
-         addNpc(npc2);
-         addBehavior(behavior1);
-         addBehavior(behavior2);
-
-
+        addNpc(npc);
+        addNpc(npc2);
+        addBehavior(behavior1);
+        addBehavior(behavior2);
 
 
 
 
-         multiplexer = new InputMultiplexer();
+
+
+        multiplexer = new InputMultiplexer();
 
 
         interactionController = new Interaction_Controller(pj, npcs, door);
@@ -168,7 +163,7 @@ public class GameScreen extends ScreenAdapter {
         //box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
 
-        }
+    }
 
     public World getWorld() {
         return world;
@@ -227,11 +222,11 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void updatePause (){
-       // if (Gdx.input.justTouched()){
-            camera.unproject(touchPoint.set((float)Gdx.input.getX(), (float) Gdx.input.getY(),0));
+        // if (Gdx.input.justTouched()){
+        camera.unproject(touchPoint.set((float)Gdx.input.getX(), (float) Gdx.input.getY(),0));
 
 
-       // }
+        // }
     }
 
     //Para que la camara siga al jugador
@@ -255,7 +250,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 
-       // controller.inputUpdateW(delta);
+        // controller.inputUpdateW(delta);
         controller.inputUpdateD(delta);
 
         pj.update(delta);
@@ -315,4 +310,5 @@ public class GameScreen extends ScreenAdapter {
 
 
 }
+
 

@@ -5,7 +5,7 @@ import Models.actor.Actor;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.mygdx.game.Door;
+import Models.ObjetosEstaticos.Door;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +40,10 @@ public class Interaction_Controller extends InputAdapter {
 
                         System.out.println("TE MIRO");
                         System.out.println("\n\n");
+                        break;
                     }
                 }
             }
-            System.out.println(Math.round(bodyPJ.getWorldCenter().y * 10f)/10f);
-            System.out.println(Math.round((door.getBody().getWorldCenter().y - 0.8f) * 10f)/10f);
             if(isCloseDoor(door)){
                 player.getBody().setTransform(705/PPM, 310/PPM, 0);
             }

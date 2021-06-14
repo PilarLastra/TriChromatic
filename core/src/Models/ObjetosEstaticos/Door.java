@@ -1,9 +1,10 @@
-package com.mygdx.game;
+package Models.ObjetosEstaticos;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mygdx.game.GameScreen;
 
 import static helper.Constante.PPM;
 
