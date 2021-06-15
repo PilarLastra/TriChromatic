@@ -3,6 +3,7 @@ package Models.actor;
 import Models.AnimationSet;
 import Models.Direction;
 import Screens.GameScreen;
+import Screens.HouseScreen;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -39,6 +40,8 @@ public class Actor {
 
     private GameScreen gameScreen;
 
+    private HouseScreen houseScreen;
+
 
 
 // Metodos //
@@ -53,6 +56,18 @@ public class Actor {
         this.gameScreen = gameScreen;
         this.player = crearPlayer(isNPC);
         this.facing = Direction.SOUTH; //Despues se sobrescribe
+    }
+
+    public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
+        this.x = x;
+        this.y = y;
+        this.worldX = x;
+        this.worldY = y;
+        this.animations = animations;
+        this.state = ACTOR_STATE.STANDING;
+        this.houseScreen = houseScreen;
+        this.player = crearPlayer(isNPC);
+        this.facing = Direction.SOUTH;
     }
 
     public float getX() {
@@ -192,7 +207,13 @@ public class Actor {
         else
             playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
         playerbody.fixedRotation = true;
-        player = gameScreen.getWorld().createBody(playerbody);
+        if(gameScreen != null){
+            player = gameScreen.getWorld().createBody(playerbody);
+        }
+        else if(houseScreen != null){
+            player = houseScreen.getWorld().createBody(playerbody);
+        }
+
         PolygonShape shape = new PolygonShape();
         if(isNPC) {
             shape.setAsBox(17 / 4 / PPM, 24 / 4 / PPM);

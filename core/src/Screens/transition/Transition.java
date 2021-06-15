@@ -45,4 +45,6 @@ public abstract class Transition {
     public float getDuration() {
         return duration;
     }
+
+
 }

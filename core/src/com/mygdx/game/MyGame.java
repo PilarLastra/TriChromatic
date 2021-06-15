@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import Screens.AbstractScreen;
 import Screens.GameScreen;
+import Screens.HouseScreen;
 import Screens.TransitionScreen;
 import Screens.transition.Transition;
 import aurelienribon.tweenengine.TweenManager;
@@ -22,6 +23,7 @@ public class MyGame extends Game {
 
 	/// Pantallas de juego
 	private GameScreen gameScreen;
+	private HouseScreen houseScreen;
 	private TransitionScreen transitionScreen;
 
 	// Metodos //
@@ -47,6 +49,8 @@ public class MyGame extends Game {
 
 		gameScreen = new GameScreen(this);
 
+		houseScreen = new HouseScreen(this);
+
 		transitionScreen = new TransitionScreen(this);
 
 
@@ -70,13 +74,13 @@ public class MyGame extends Game {
 		return gameScreen;
 	}
 
+	public HouseScreen getHouseScreen(){
+		return houseScreen;
+	}
 
 	public TweenManager getTweenManager() {
 		return tweenManager;
 	}
-
-
-
 
 	public void startTransition(AbstractScreen from, AbstractScreen to, Transition out, Transition in) { //chequear la interface de accion, creo que no hace falta
 		transitionScreen.startTransition(from, to, out, in);

@@ -2,10 +2,14 @@ package Controller;
 
 import Models.Direction;
 import Models.actor.Actor;
+import Screens.GameScreen;
+import Screens.HouseScreen;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.physics.box2d.Body;
 import Models.ObjetosEstaticos.Door;
+import com.mygdx.game.MyGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +25,23 @@ public class Interaction_Controller extends InputAdapter {
 
     private Door door;
 
+    private MyGame app;
+
     private List<Actor> npcs = new ArrayList<Actor>();
 
-    public Interaction_Controller(Actor player, List<Actor> npcs, Door door) {
+    public Interaction_Controller(Actor player, List<Actor> npcs, Door door, MyGame app) {
         this.player = player;
         this.npcs = npcs;
         this.bodyPJ = player.getBody();
         this.door = door;
+        this.app = app;
+    }
+
+    public Interaction_Controller(Actor player, Door door, MyGame app) {
+        this.player = player;
+        this.bodyPJ = player.getBody();
+        this.door = door;
+        this.app = app;
     }
 
     @Override
@@ -41,7 +55,10 @@ public class Interaction_Controller extends InputAdapter {
                 }
             }
             if(isCloseDoor(door)){
-                player.getBody().setTransform(705/PPM, 310/PPM, 0);
+                if(app.getScreen()instanceof GameScreen) {
+                    app.getGameScreen().fading();
+                }else app.getHouseScreen().fading();
+
             }
             return false;
         }

@@ -34,13 +34,6 @@ public class TransitionScreen extends AbstractScreen{
     public TransitionScreen(MyGame app) {
         super(app);
         batch = new SpriteBatch();
-       /*orthographicCamera = new OrthographicCamera();
-        widthScreen = Gdx.graphics.getWidth();
-        heightScreen = Gdx.graphics.getHeight();
-        orthographicCamera.setToOrtho(false,widthScreen,heightScreen);
-
-        */
-
         viewport = new ScreenViewport();
     }
 

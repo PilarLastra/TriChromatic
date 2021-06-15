@@ -1,6 +1,7 @@
 package helper;
 
 import Screens.GameScreen;
+import Screens.HouseScreen;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -18,15 +19,22 @@ public class TiledMapHelper {
 
     private TiledMap tiledMap;
     private GameScreen gameScreen;
+    private HouseScreen houseScreen;
+    private Body body;
 
     // Metodos //
 
     public TiledMapHelper(GameScreen gameScreen){
         this.gameScreen = gameScreen;
-
-
-
     }
+
+    public TiledMapHelper(HouseScreen houseScreen){
+        this.houseScreen = houseScreen;
+    }
+
+
+
+
 //Este get esta echo para poder pasarle el mapa al actor
     public TiledMap getTiledMap() {
         return tiledMap;
@@ -56,7 +64,12 @@ public class TiledMapHelper {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = gameScreen.getWorld().createBody(bodyDef);
+        if(gameScreen != null){
+            body = gameScreen.getWorld().createBody(bodyDef);
+        }
+        else if(houseScreen != null){
+            body = houseScreen.getWorld().createBody(bodyDef);
+        }
         Shape shape = createPolygonShape (polygonMapObject);
         body.createFixture(shape, 1.0f);
         shape.dispose();
