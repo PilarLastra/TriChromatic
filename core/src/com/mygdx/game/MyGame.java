@@ -1,9 +1,6 @@
 package com.mygdx.game;
 
-import Screens.AbstractScreen;
-import Screens.GameScreen;
-import Screens.HouseScreen;
-import Screens.TransitionScreen;
+import Screens.*;
 import Screens.transition.Transition;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
@@ -25,6 +22,7 @@ public class MyGame extends Game {
 	private GameScreen gameScreen;
 	private HouseScreen houseScreen;
 	private TransitionScreen transitionScreen;
+	private StartScreen startscreen;
 
 	// Metodos //
 
@@ -42,6 +40,7 @@ public class MyGame extends Game {
 		assetManager.load("PJ/player.atlas", TextureAtlas.class);
 		assetManager.load("PJ/PixiPili.atlas",TextureAtlas.class);
 		assetManager.load("res/graphics/stattusefect/white.png", Texture.class);
+		assetManager.load("res/graphics/stattusefect/start.png", Texture.class);
 		assetManager.finishLoading();
 
 
@@ -53,8 +52,10 @@ public class MyGame extends Game {
 
 		transitionScreen = new TransitionScreen(this);
 
+		startscreen = new StartScreen(this);
 
-		this.setScreen(gameScreen);
+
+		this.setScreen(startscreen);
 
 	}
 

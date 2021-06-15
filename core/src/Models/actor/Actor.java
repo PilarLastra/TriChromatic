@@ -67,7 +67,7 @@ public class Actor {
         this.state = ACTOR_STATE.STANDING;
         this.houseScreen = houseScreen;
         this.player = crearPlayer(isNPC);
-        this.facing = Direction.SOUTH;
+        this.facing = Direction.EAST;
     }
 
     public float getX() {

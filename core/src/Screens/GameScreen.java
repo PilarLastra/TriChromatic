@@ -20,12 +20,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mygdx.game.MyGame;
@@ -123,14 +119,14 @@ public class GameScreen extends AbstractScreen {
 
 
         /*creacion de player*/
-        pj = new Actor(550/PPM,100/PPM, animationsPJ,this,false);
+        pj = new Actor(143/PPM,200/PPM, animationsPJ,this,false);
 
         controller = new ControllerActor(pj);
 
 
         /// puerta
 
-        Door door = new Door(577/PPM, 147/PPM, this);
+        Door door = new Door(143/PPM, 210/PPM, this);
 
         ///  npc
 
@@ -156,7 +152,7 @@ public class GameScreen extends AbstractScreen {
         multiplexer.addProcessor(1, interactionController);
 
 
-        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+        //box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
     }
 
@@ -255,8 +251,8 @@ public class GameScreen extends AbstractScreen {
         getApp().startTransition(
                 this,
                 getApp().getHouseScreen(),
-                new FadeOutTransition(1,  getApp().getTweenManager(), getApp().getAssetManager()),
-                new FadeInTransition(1,  getApp().getTweenManager(), getApp().getAssetManager()));
+                new FadeOutTransition(1,  getApp().getTweenManager(), getApp().getAssetManager(), 1),
+                new FadeInTransition(1,  getApp().getTweenManager(), getApp().getAssetManager(), 1));
     }
 
     public World getWorld() {

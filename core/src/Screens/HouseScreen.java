@@ -89,13 +89,13 @@ public class HouseScreen extends AbstractScreen{
 
         // PJ
 
-        pj = new Actor(705/PPM, 310/PPM, animationsPJ,this,false);
+        pj = new Actor(505/PPM, 410/PPM, animationsPJ,this,false);
 
         controller = new ControllerActor(pj);
 
         // Puerta
 
-        Door door = new Door(705/PPM, 335/PPM, this);
+        Door door = new Door(670/PPM, 246/PPM, this);
 
         // Interaction Controller
 
@@ -194,8 +194,8 @@ public class HouseScreen extends AbstractScreen{
         getApp().startTransition(
                 this,
                 getApp().getGameScreen(),
-                new FadeOutTransition(1,  getApp().getTweenManager(), getApp().getAssetManager()),
-                new FadeInTransition(1,  getApp().getTweenManager(), getApp().getAssetManager()));
+                new FadeOutTransition(1,  getApp().getTweenManager(), getApp().getAssetManager(), 1),
+                new FadeInTransition(1,  getApp().getTweenManager(), getApp().getAssetManager(), 1));
     }
 
     private void cameraUpdate(){

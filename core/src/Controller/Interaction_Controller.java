@@ -80,7 +80,7 @@ public class Interaction_Controller extends InputAdapter {
         if(Math.round(bodyPJ.getWorldCenter().y*10f)/10f == Math.round((door.getBody().getWorldCenter().y +0.8f)*10f)/10f && Math.round(bodyPJ.getWorldCenter().x) == Math.round(door.getBody().getWorldCenter().x)) {
             return true;
         }
-        if (Math.round(bodyPJ.getWorldCenter().y * 10f) / 10f == Math.round((door.getBody().getWorldCenter().y - 0.8f) * 10f) / 10f && Math.round(bodyPJ.getWorldCenter().x) == Math.round(door.getBody().getWorldCenter().x)){
+        if (Math.round(bodyPJ.getWorldCenter().y * 10f) / 10f == Math.round((door.getBody().getWorldCenter().y - 0.8f) * 10f) / 10f && ((bodyPJ.getWorldCenter().x) >= (door.getBody().getWorldCenter().x-0.4f) && (bodyPJ.getWorldCenter().x) <= (door.getBody().getWorldCenter().x+0.4f))){
             return true;
         }
         return false;
