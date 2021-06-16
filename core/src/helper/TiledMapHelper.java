@@ -1,5 +1,7 @@
 package helper;
 
+import Screens.GameScreen;
+import Screens.HouseScreen;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -7,9 +9,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.GameScreen;
 
 import static helper.Constante.PPM;
 
@@ -17,17 +19,22 @@ public class TiledMapHelper {
 
     private TiledMap tiledMap;
     private GameScreen gameScreen;
-
-
+    private HouseScreen houseScreen;
+    private Body body;
 
     // Metodos //
 
     public TiledMapHelper(GameScreen gameScreen){
         this.gameScreen = gameScreen;
-
-
-
     }
+
+    public TiledMapHelper(HouseScreen houseScreen){
+        this.houseScreen = houseScreen;
+    }
+
+
+
+
 //Este get esta echo para poder pasarle el mapa al actor
     public TiledMap getTiledMap() {
         return tiledMap;
@@ -35,9 +42,9 @@ public class TiledMapHelper {
 
 
 
-    public OrthogonalTiledMapRenderer setupMap(){
+    public OrthogonalTiledMapRenderer setupMap(String path){
 
-        tiledMap = new TmxMapLoader().load("maps/Mapa1.tmx");
+        tiledMap = new TmxMapLoader().load(path);
         parseMapObjects(tiledMap.getLayers().get("Objetos").getObjects());
         return new OrthogonalTiledMapRenderer(tiledMap);
 
@@ -57,7 +64,12 @@ public class TiledMapHelper {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = gameScreen.getWorld().createBody(bodyDef);
+        if(gameScreen != null){
+            body = gameScreen.getWorld().createBody(bodyDef);
+        }
+        else if(houseScreen != null){
+            body = houseScreen.getWorld().createBody(bodyDef);
+        }
         Shape shape = createPolygonShape (polygonMapObject);
         body.createFixture(shape, 1.0f);
         shape.dispose();

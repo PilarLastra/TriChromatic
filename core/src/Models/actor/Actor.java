@@ -2,10 +2,11 @@ package Models.actor;
 
 import Models.AnimationSet;
 import Models.Direction;
+import Screens.GameScreen;
+import Screens.HouseScreen;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.mygdx.game.GameScreen;
 import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,12 +23,11 @@ public class Actor {
 
     private float worldX, worldY;
 
-    private float bodyX,bodyY;
 
     private float srcX, srcY; //origen
     private float destX, destY; //destino
     private float animTimer;
-    private float ANIM_TIMER = 0.3f; //Tiempo que dura la animacion
+    private float ANIM_TIMER = 0.1f; //Tiempo que dura la animacion
 
     private float walkTimer; //Se nececita sabes cuanto tiempo lleva el actor caminando ya que si da un "paso" la animacion sera diferente a si camina dos tiles enteros
     private boolean moveRequestThisFrame;
@@ -39,6 +39,8 @@ public class Actor {
     private AnimationSet animations;
 
     private GameScreen gameScreen;
+
+    private HouseScreen houseScreen;
 
 
 
@@ -54,6 +56,18 @@ public class Actor {
         this.gameScreen = gameScreen;
         this.player = crearPlayer(isNPC);
         this.facing = Direction.SOUTH; //Despues se sobrescribe
+    }
+
+    public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
+        this.x = x;
+        this.y = y;
+        this.worldX = x;
+        this.worldY = y;
+        this.animations = animations;
+        this.state = ACTOR_STATE.STANDING;
+        this.houseScreen = houseScreen;
+        this.player = crearPlayer(isNPC);
+        this.facing = Direction.EAST;
     }
 
     public float getX() {
@@ -142,8 +156,6 @@ public class Actor {
         this.facing = dir;
         this.srcX = x;
         this.srcY = y;
-        this.bodyX=x;
-        this.bodyY=y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
         this.worldX = x;
@@ -181,7 +193,6 @@ public class Actor {
         return state;
     }
 
-
     public Body getBody() {
         return player;
     }
@@ -196,13 +207,24 @@ public class Actor {
         else
             playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
         playerbody.fixedRotation = true;
-        Body body = gameScreen.getWorld().createBody(playerbody);
+        if(gameScreen != null){
+            player = gameScreen.getWorld().createBody(playerbody);
+        }
+        else if(houseScreen != null){
+            player = houseScreen.getWorld().createBody(playerbody);
+        }
+
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(17/2/PPM, 24/2/PPM);
-        body.createFixture(shape, 1.0F);
+        if(isNPC) {
+            shape.setAsBox(17 / 4 / PPM, 24 / 4 / PPM);
+        }
+        else{
+            shape.setAsBox(17 / 2 / PPM, 24 / 2 / PPM);
+        }
+        player.createFixture(shape, 1.0F);
         shape.dispose();
 
-        return body;
+        return player;
 
     }
 
