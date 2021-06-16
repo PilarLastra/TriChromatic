@@ -162,12 +162,17 @@ public class HouseScreen extends AbstractScreen{
         }
 
 
+
     }
 
     @Override
     public void render(float delta) {
 
-        controller.inputUpdateD(delta);
+        controller.inputUpdateD(delta, 1);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){  // CORRER
+            controller.inputUpdateD(delta, 3);
+        }
 
         pj.update(delta);
 

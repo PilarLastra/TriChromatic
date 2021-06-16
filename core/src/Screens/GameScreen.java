@@ -152,7 +152,7 @@ public class GameScreen extends AbstractScreen {
         multiplexer.addProcessor(1, interactionController);
 
 
-        //box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
+        box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
 
     }
 
@@ -183,8 +183,7 @@ public class GameScreen extends AbstractScreen {
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             try {
                 savefile = new FileWriter("saveFile.json");
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -211,7 +210,11 @@ public class GameScreen extends AbstractScreen {
     public void render(float delta) {
 
 
-        controller.inputUpdateD(delta);
+        controller.inputUpdateD(delta, 1);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){  // CORRER
+            controller.inputUpdateD(delta, 3);
+        }
 
         pj.update(delta);
 
