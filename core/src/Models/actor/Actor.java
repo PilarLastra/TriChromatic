@@ -2,6 +2,8 @@ package Models.actor;
 
 import Models.AnimationSet;
 import Models.Direction;
+import battle.Battle;
+import com.badlogic.gdx.graphics.Texture;
 import Screens.GameScreen;
 import Screens.HouseScreen;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -9,8 +11,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Interpolation;
+
+import dialogue.Dialogue;
 
 import static helper.Constante.PPM;
 
@@ -23,14 +26,19 @@ public class Actor {
 
     private float worldX, worldY;
 
-
-    private float srcX, srcY; //origen
     private float destX, destY; //destino
     private float animTimer;
     private float ANIM_TIMER = 0.1f; //Tiempo que dura la animacion
 
     private float walkTimer; //Se nececita sabes cuanto tiempo lleva el actor caminando ya que si da un "paso" la animacion sera diferente a si camina dos tiles enteros
     private boolean moveRequestThisFrame;
+
+    private Dialogue dialogue;
+
+    private int index;
+
+
+    private Texture dialSprite;
 
     private Body player;
 
@@ -44,18 +52,24 @@ public class Actor {
 
 
 
+
 // Metodos //
 
-    public Actor(float x, float y, AnimationSet animations, GameScreen gameScreen, boolean isNPC) {
+    public Actor(float x, float y, Texture dialSprite, AnimationSet animations, GameScreen gameScreen, boolean isNPC, int index) {
         this.x = x;
         this.y = y;
-        this.worldX = x;
-        this.worldY = y;
         this.animations = animations;
         this.state = ACTOR_STATE.STANDING;
+        this.dialSprite = dialSprite;
         this.gameScreen = gameScreen;
         this.player = crearPlayer(isNPC);
         this.facing = Direction.SOUTH; //Despues se sobrescribe
+        this.index= index;
+    }
+
+
+    public int getIndex() {
+        return index;
     }
 
     public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
@@ -78,13 +92,15 @@ public class Actor {
         return y;
     }
 
-    public float getWorldX() {
-        return worldX;
+    public void setX(float x) {
+        this.x = x;
     }
 
-    public float getWorldY() {
-        return worldY;
+    public void setY(float y) {
+        this.y = y;
     }
+
+
 
     public TextureRegion getSprite(){
         if (state == ACTOR_STATE.WALKING){
@@ -102,14 +118,15 @@ public class Actor {
         ;
     }
 
-//Delta es el tiempo del ultimo frame (creo)
+    public void setStateStanding() {
+        this.state = ACTOR_STATE.STANDING;
+    }
+
+    //Delta es el tiempo del ultimo frame (creo)
     public void update(float delta){
         if(state == ACTOR_STATE.WALKING){
             animTimer += delta;
             walkTimer += delta;
-            worldX = Interpolation.linear.apply(srcX,destX,animTimer/ANIM_TIMER);
-            worldY = Interpolation.linear.apply(srcY,destY,animTimer/ANIM_TIMER);
-
             if(animTimer > ANIM_TIMER){//Si la animacion termino
                 float leftOverTime = animTimer - ANIM_TIMER;
                 walkTimer -= leftOverTime;
@@ -122,6 +139,8 @@ public class Actor {
             }
         }
         moveRequestThisFrame = false;
+
+
 
     }
 
@@ -136,7 +155,7 @@ public class Actor {
         }
 
         // No se va de los limites del mapa sa sa saaaaaaaaaaaaaaaaaa
-        if(player.getPosition().x <0 || player.getPosition().x + dir.getDx() >= Setting.MAP_WIDE || y + dir.getDy() <0 || y + dir.getDy() >= Setting.MAP_HEIGHT){
+        if(player.getPosition().x <0 || player.getPosition().x + dir.getDx() >= Setting.MAP_WIDE || player.getPosition().y + dir.getDy() <0 || player.getPosition().y + dir.getDy() >= Setting.MAP_HEIGHT){
 
             return false;
         }
@@ -151,15 +170,17 @@ public class Actor {
 
     }
 
-//Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
+    public Texture getDialSprite() {
+        return dialSprite;
+    }
+
+    //Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
     private void initializeMove(Direction dir){
         this.facing = dir;
         this.srcX = x;
         this.srcY = y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
-        this.worldX = x;
-        this.worldY = y;
         animTimer = 0f;
         state = ACTOR_STATE.WALKING;
 
@@ -167,13 +188,18 @@ public class Actor {
 
     private void finishMove(){
         state = ACTOR_STATE.STANDING;
-        this.worldX =  destX;
-        this.worldY =  destY;
-        this.srcX = 0;
-        this.srcY = 0;
         this.destX = 0;
         this.destY = 0;
 
+    }
+
+
+    public void setDialogue(Dialogue dialogue) {
+        this.dialogue = dialogue;
+    }
+
+    public Dialogue getDialogue() {
+        return dialogue;
     }
 
 
@@ -188,6 +214,8 @@ public class Actor {
     public Direction getFacing() {
         return facing;
     }
+
+
 
     public ACTOR_STATE getMovementState() {
         return state;
@@ -204,8 +232,9 @@ public class Actor {
         playerbody.position.y = getY();
         if (isNPC)
             playerbody.type = BodyDef.BodyType.KinematicBody; //Un objeto kinematico se mueve pero no es afectado por otros objetos
-        else
+        else {
             playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
+        }
         playerbody.fixedRotation = true;
         if(gameScreen != null){
             player = gameScreen.getWorld().createBody(playerbody);
@@ -227,9 +256,6 @@ public class Actor {
         return player;
 
     }
-
-
-
 
 
 }

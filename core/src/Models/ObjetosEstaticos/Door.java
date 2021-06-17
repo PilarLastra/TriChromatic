@@ -1,15 +1,14 @@
 package Models.ObjetosEstaticos;
 
+
 import Screens.GameScreen;
 import Screens.HouseScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-
-
-
 import static helper.Constante.PPM;
+
 
 public class Door {
 
@@ -21,6 +20,7 @@ public class Door {
     private GameScreen gamescreen;
     private HouseScreen houseScreen;
 
+
     /// Contruct
 
     public Door(float x, float y, /*Texture texture,*/ GameScreen gamescreen) {
@@ -31,6 +31,7 @@ public class Door {
         this.body = createBody();
     }
 
+
     public Door(float x, float y, /*Texture texture,*/ HouseScreen houseScreen) {
         this.x = x;
         this.y = y;
@@ -38,7 +39,7 @@ public class Door {
         this.houseScreen = houseScreen;
         this.body = createBody();
     }
-
+  
     /// Getter & Setters
 
     public float getX() {
@@ -66,6 +67,7 @@ public class Door {
         }else {
             body = houseScreen.getWorld().createBody(doorBody);
         }
+
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(17/2/PPM, 24/2/PPM);
         body.createFixture(shape, 1.0f);
@@ -73,12 +75,5 @@ public class Door {
 
         return body;
     }
-
-
-
-
-
-
-
 
 }

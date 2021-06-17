@@ -1,17 +1,18 @@
 package helper;
 
+
 import Screens.GameScreen;
 import Screens.HouseScreen;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+
 
 import static helper.Constante.PPM;
 
@@ -21,6 +22,7 @@ public class TiledMapHelper {
     private GameScreen gameScreen;
     private HouseScreen houseScreen;
     private Body body;
+
 
     // Metodos //
 
@@ -33,7 +35,11 @@ public class TiledMapHelper {
     }
 
 
+    
 
+    public TiledMapHelper(BattleScreen battleScreen){
+        this.battleScreen = battleScreen;
+    }
 
 //Este get esta echo para poder pasarle el mapa al actor
     public TiledMap getTiledMap() {

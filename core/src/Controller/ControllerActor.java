@@ -103,24 +103,7 @@ public class ControllerActor extends InputAdapter {
     }
 
     }
-/*
-    public void inputUpdateW (float delta){
-        int verticalForce =0;
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            verticalForce+=1;
-            actor.move(Direction.NORTH);
 
-        }
-         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            verticalForce -= 1;
-            actor.move(Direction.SOUTH);
-        }
-
-
-
-    }
-
- */
 
 
 
