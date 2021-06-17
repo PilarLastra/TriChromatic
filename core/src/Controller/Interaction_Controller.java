@@ -35,15 +35,16 @@ public class Interaction_Controller extends InputAdapter {
 
     private DialogueController dialogueController;
 
-    private List<Actor> npcs = new ArrayList<Actor>();
 
 
     public Interaction_Controller(Actor player, List<Actor> npcs,  Door door, DialogueController dialogueController) {
         this.player = player;
         this.npcs = npcs;
         bodyPJ = player.getBody();
-        this.door=door;
+        this.door = door;
         this.dialogueController = dialogueController;
+
+    }
 
     public Interaction_Controller(Actor player, List<Actor> npcs, Door door, MyGame app) {
         this.player = player;
@@ -67,7 +68,7 @@ public class Interaction_Controller extends InputAdapter {
 
         if (keycode == Input.Keys.X) {
             for (Actor npc : npcs) {
-                if (isClose(npc)) {
+                if (isCloseNpc(npc)) {
                     if (npc.refaceWithoutAnimation(Direction.getOpposite(player.getFacing()))) {
                         if(npc.getDialogue() != null){
                             Dialogue dialogue = npc.getDialogue();
