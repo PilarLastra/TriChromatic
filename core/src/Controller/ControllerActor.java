@@ -71,32 +71,32 @@ public class ControllerActor extends InputAdapter {
     }
 
  //de esta manera no se puede caminar de forma diagonal
-    public void inputUpdateD (float delta)
+    public void inputUpdateD (float delta, int velocidad)
     {
         int horizontalForce =0;
         int verticalForce =0;
         body.setLinearVelocity(0,0);
         if(up){
-            verticalForce+=1;
+            verticalForce+= velocidad;
             actor.move(Direction.NORTH);
             body.setLinearVelocity(body.getLinearVelocity().x, verticalForce * 2);
             return;
 
         }
         if(down) {
-            verticalForce -= 1;
+            verticalForce -= velocidad;
             actor.move(Direction.SOUTH);
             body.setLinearVelocity(body.getLinearVelocity().x, verticalForce * 2);
             return;
         }
         if(right){
-            horizontalForce +=1;
+            horizontalForce += velocidad;
             actor.move(Direction.EAST);
             body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
             return;
         }
          if(left){
-             horizontalForce -=1;
+             horizontalForce -= velocidad;
              actor.move(Direction.WEST);
              body.setLinearVelocity(horizontalForce * 2, body.getLinearVelocity().y);
              return;

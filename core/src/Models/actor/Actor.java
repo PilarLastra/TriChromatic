@@ -4,10 +4,11 @@ import Models.AnimationSet;
 import Models.Direction;
 import battle.Battle;
 import com.badlogic.gdx.graphics.Texture;
+import Screens.GameScreen;
+import Screens.HouseScreen;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import Screeen.GameScreen;
 import com.mygdx.game.Setting;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
@@ -23,6 +24,7 @@ public class Actor {
     private float y;
     private Direction facing;
 
+    private float worldX, worldY;
 
     private float destX, destY; //destino
     private float animTimer;
@@ -46,6 +48,8 @@ public class Actor {
 
     private GameScreen gameScreen;
 
+    private HouseScreen houseScreen;
+
 
 
 
@@ -66,6 +70,18 @@ public class Actor {
 
     public int getIndex() {
         return index;
+    }
+
+    public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
+        this.x = x;
+        this.y = y;
+        this.worldX = x;
+        this.worldY = y;
+        this.animations = animations;
+        this.state = ACTOR_STATE.STANDING;
+        this.houseScreen = houseScreen;
+        this.player = crearPlayer(isNPC);
+        this.facing = Direction.EAST;
     }
 
     public float getX() {
@@ -161,6 +177,8 @@ public class Actor {
     //Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
     private void initializeMove(Direction dir){
         this.facing = dir;
+        this.srcX = x;
+        this.srcY = y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
         animTimer = 0f;
@@ -203,7 +221,6 @@ public class Actor {
         return state;
     }
 
-
     public Body getBody() {
         return player;
     }
@@ -219,12 +236,20 @@ public class Actor {
             playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
         }
         playerbody.fixedRotation = true;
-        player = gameScreen.getWorld().createBody(playerbody);
+        if(gameScreen != null){
+            player = gameScreen.getWorld().createBody(playerbody);
+        }
+        else if(houseScreen != null){
+            player = houseScreen.getWorld().createBody(playerbody);
+        }
+
         PolygonShape shape = new PolygonShape();
-        if (isNPC)
-            shape.setAsBox(17/4/PPM, 24/4/PPM);
-        else
-            shape.setAsBox(17/2/PPM, 24/2/PPM);
+        if(isNPC) {
+            shape.setAsBox(17 / 4 / PPM, 24 / 4 / PPM);
+        }
+        else{
+            shape.setAsBox(17 / 2 / PPM, 24 / 2 / PPM);
+        }
         player.createFixture(shape, 1.0F);
         shape.dispose();
 
