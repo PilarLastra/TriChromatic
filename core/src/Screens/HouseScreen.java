@@ -203,12 +203,11 @@ public class HouseScreen extends AbstractScreen{
 /*
         if(getApp().getBattleScreen().getBattle().getState() == Battle.STATE.LOSE)
         {
-            Dialogue win = new Dialogue();
+            Dialogue lose = new Dialogue();
             DialogueNode node4 = new DialogueNode("Haz caido derrotado...",0);
-            win.addNode(node4);
+            lose.addNode(node4);
             dialogueController.startDialogue(lose);
             getApp().getBattleScreen().getBattle().setStateReady();
-
         }
 */        // ESTO IRA CUANDO HAYA IMPLEMENTACION DE DIALOGO
 
