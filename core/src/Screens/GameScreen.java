@@ -199,9 +199,9 @@ public class GameScreen extends AbstractScreen {
         ///DIALOGOS
 
         Dialogue dNPC1 = new Dialogue();
-        DialogueNode node1 = new DialogueNode("Hola! Soy una boluda, me llamo Pilar, como estas? \nBienvenido al mundo!",0);
-        DialogueNode node2 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
-        DialogueNode node3 = new DialogueNode("Hola! Soy el npc 1",2);
+        DialogueNode node1 = new DialogueNode("Hola Amichi, como estas? \nBienvenido de vuelta",0);
+        DialogueNode node2 = new DialogueNode("Queres ir a ver pueblo rosa?\n Vas a tener que derrotar al muchacho malo",1);
+        DialogueNode node3 = new DialogueNode("Esta en la parte de arriba del camino\n",2);
         node1.makeLinear(node2.getId());
         node2.makeLinear(node3.getId());
         dNPC1.addNode(node1);
@@ -210,9 +210,9 @@ public class GameScreen extends AbstractScreen {
         pilarSprite = new Texture("Ui/piliUWU.png");
 
         Dialogue dNPC2 = new Dialogue();
-        DialogueNode node4 = new DialogueNode("Hola! Soy un bolud, me llamo Tito, como estas? \nBienvenido al mundo!",0);
-        DialogueNode node5 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
-        DialogueNode node6 = new DialogueNode("Hola! Soy el npc 1",2);
+        DialogueNode node4 = new DialogueNode("Buenaaaaaaaas, todo tranqui pa?",0);
+        DialogueNode node5 = new DialogueNode("Anda a hablan con la pilula que \nte queria pedir algo",1);
+        DialogueNode node6 = new DialogueNode("Dale pa apura el tramite",2);
         node4.makeLinear(node5.getId());
         node5.makeLinear(node6.getId());
         dNPC2.addNode(node4);
@@ -221,9 +221,9 @@ public class GameScreen extends AbstractScreen {
         titoSprite = new Texture("Ui/tito.png");
 
         Dialogue dNPC3 = new Dialogue();
-        DialogueNode node7 = new DialogueNode("Hola! Soy un bolud, me llamo Damian, como estas? \nBienvenido al mundo!",0);
-        DialogueNode node8 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
-        DialogueNode node9 = new DialogueNode("Hola! Soy el npc 1",2);
+        DialogueNode node7 = new DialogueNode("Que onda poo todo bien?\n",0);
+        DialogueNode node8 = new DialogueNode("La pilulaa te estaba buscando\n no se si te aviso el tontito",1);
+        DialogueNode node9 = new DialogueNode("Che cuando termines con eso\n te tengo q mostrar algo en pueblo azul",2);
         node7.makeLinear(node8.getId());
         node8.makeLinear(node9.getId());
         dNPC3.addNode(node7);
@@ -233,7 +233,7 @@ public class GameScreen extends AbstractScreen {
 
 
         Dialogue dNPC4 = new Dialogue();
-        DialogueNode node10 = new DialogueNode("Oh, descubriste mi identidad! Fiuuuuuuumba \nAhora tendre que marcharme....",0);
+        DialogueNode node10 = new DialogueNode("Oh, descubriste mi disfraz! Fiuuuuuuumba \nAhora tendre que marcharme....",0);
         dNPC4.addNode(node10);
         espantapajarosSprite = new Texture("Ui/espantapajarosUWU.png");
 
