@@ -19,7 +19,6 @@ public class LimitedWalkingBehavior extends Actor_Behavior{
     private float timer;
     private float currentWaitTime;
 
-    private float dx, dy;
     private float limNorth, limSouth, limEast, limWest;
 
     public LimitedWalkingBehavior(Actor actor, float limNorth, float limSouth, float limEast, float limWest, float moveIntervalMinimum, float moveIntervalMaximum, Random random) {
