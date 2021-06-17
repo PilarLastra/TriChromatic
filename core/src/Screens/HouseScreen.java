@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -49,12 +50,13 @@ public class HouseScreen extends AbstractScreen{
     private World world;
     private Actor pj;
 
-    // Archivo
-
+    ///Archivo
     private Gson gson;
-    private FileWriter savefile;
-    private JsonReader reader;
-
+    private FileWriter savefile1;
+    private FileWriter savefile2;
+    private JsonReader reader1;
+    private JsonReader reader2;
+    private String booleano;
 
     public HouseScreen(MyGame app) {
         super(app);
@@ -84,8 +86,6 @@ public class HouseScreen extends AbstractScreen{
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         this.tiledMapHelper = new TiledMapHelper(this);
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap("maps/Mapa2.tmx");
-
-
 
         // PJ
 
@@ -128,35 +128,47 @@ public class HouseScreen extends AbstractScreen{
         if(Gdx.input.isKeyPressed(Input.Keys.F8)){
             gson = new Gson();
             try {
-                reader = new JsonReader(new FileReader("saveFile.json"));
+                reader1 = new JsonReader(new FileReader("positionSaveFile.json"));
+                reader2 = new JsonReader(new FileReader("screenSaveFile.json"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            Vector2 vectorsito = gson.fromJson(reader, Vector2.class);
+            Vector2 vectorsito = gson.fromJson(reader1, Vector2.class);
+            booleano = gson.fromJson(reader2, String.class);
             pj.getBody().setTransform(vectorsito, 0);
+            if(booleano.equals("true")){
+                getApp().setScreen(getApp().getGameScreen());
+            }
         }
 
+
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            try {
-                savefile = new FileWriter("saveFile.json");
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
             gson = new Gson();
+            booleano ="false"; // Estamos en gamescreen por lo tanto es true
 
-            gson.toJson(pj.getBody().getPosition(), savefile);
             try {
-                savefile.flush();
+                savefile1 = new FileWriter("positionSaveFile.json");
+                savefile2 = new FileWriter("screenSaveFile.json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            gson.toJson(pj.getBody().getPosition(), savefile1);
+            gson.toJson(booleano, savefile2);
+
+            try {
+                savefile1.flush();
+                savefile2.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                savefile.close();
+                savefile1.close();
+                savefile2.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
 
             Gdx.app.exit(); //Si apretas escape se cierra
         }
@@ -188,6 +200,18 @@ public class HouseScreen extends AbstractScreen{
                 17, 24);
 
         batch.end();
+/*
+        if(getApp().getBattleScreen().getBattle().getState() == Battle.STATE.LOSE)
+        {
+            Dialogue win = new Dialogue();
+            DialogueNode node4 = new DialogueNode("Haz caido derrotado...",0);
+            win.addNode(node4);
+            dialogueController.startDialogue(lose);
+            getApp().getBattleScreen().getBattle().setStateReady();
+
+        }
+*/        // ESTO IRA CUANDO HAYA IMPLEMENTACION DE DIALOGO
+
 
     }
 
