@@ -1,0 +1,118 @@
+
+pixiTito.png
+size: 188, 186
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+camina_este
+  rotate: false
+  xy: 90, 74
+  size: 34, 56
+  orig: 64, 64
+  offset: 15, 2
+  index: 3
+camina_este
+  rotate: false
+  xy: 80, 16
+  size: 34, 56
+  orig: 64, 64
+  offset: 15, 2
+  index: 1
+camina_frente
+  rotate: false
+  xy: 46, 128
+  size: 40, 56
+  orig: 64, 64
+  offset: 11, 2
+  index: 1
+camina_frente
+  rotate: false
+  xy: 2, 8
+  size: 40, 56
+  orig: 64, 64
+  offset: 12, 2
+  index: 3
+camina_frente
+  rotate: false
+  xy: 132, 132
+  size: 42, 52
+  orig: 64, 64
+  offset: 11, 6
+  index: 2
+camina_norte
+  rotate: false
+  xy: 2, 126
+  size: 42, 58
+  orig: 64, 64
+  offset: 11, 0
+  index: 3
+camina_norte
+  rotate: false
+  xy: 2, 66
+  size: 42, 58
+  orig: 64, 64
+  offset: 11, 0
+  index: 1
+camina_norte
+  rotate: false
+  xy: 88, 132
+  size: 42, 52
+  orig: 64, 64
+  offset: 11, 6
+  index: 2
+stand_norte
+  rotate: false
+  xy: 88, 132
+  size: 42, 52
+  orig: 64, 64
+  offset: 11, 6
+  index: -1
+camina_oeste
+  rotate: false
+  xy: 126, 74
+  size: 34, 56
+  orig: 64, 64
+  offset: 15, 2
+  index: 1
+camina_oeste
+  rotate: false
+  xy: 44, 8
+  size: 34, 56
+  orig: 64, 64
+  offset: 15, 2
+  index: 3
+stand frente
+  rotate: false
+  xy: 46, 74
+  size: 42, 52
+  orig: 64, 64
+  offset: 11, 6
+  index: -1
+stand_este
+  rotate: false
+  xy: 116, 22
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 8
+  index: -1
+camina_este
+  rotate: false
+  xy: 116, 22
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 8
+  index: 2
+stand_oeste
+  rotate: false
+  xy: 152, 22
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 8
+  index: -1
+camina_oeste
+  rotate: false
+  xy: 152, 22
+  size: 34, 50
+  orig: 64, 64
+  offset: 15, 8
+  index: 2

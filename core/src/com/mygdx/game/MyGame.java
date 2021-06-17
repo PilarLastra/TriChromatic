@@ -39,6 +39,9 @@ public class MyGame extends Game {
 		assetManager = new AssetManager();
 		assetManager.load("PJ/player.atlas", TextureAtlas.class);
 		assetManager.load("PJ/PixiPili.atlas",TextureAtlas.class);
+		assetManager.load("PJ/pixiTito.atlas",TextureAtlas.class);
+		assetManager.load("PJ/PixiDemi.atlas",TextureAtlas.class);
+		assetManager.load("PJ/Enemigos.atlas",TextureAtlas.class);
 		assetManager.load("res/graphics/stattusefect/white.png", Texture.class);
 		assetManager.load("res/graphics/stattusefect/start.png", Texture.class);
 		assetManager.finishLoading();
