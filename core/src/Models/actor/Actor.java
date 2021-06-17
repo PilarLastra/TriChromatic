@@ -35,7 +35,6 @@ public class Actor {
 
     private Dialogue dialogue;
 
-    private int index;
 
 
     private Texture dialSprite;
@@ -55,22 +54,17 @@ public class Actor {
 
 // Metodos //
 
-    public Actor(float x, float y, Texture dialSprite, AnimationSet animations, GameScreen gameScreen, boolean isNPC, int index) {
+    public Actor(float x, float y, /*Texture dialSprite,*/AnimationSet animations, GameScreen gameScreen, boolean isNPC) {
         this.x = x;
         this.y = y;
         this.animations = animations;
         this.state = ACTOR_STATE.STANDING;
-        this.dialSprite = dialSprite;
+       // this.dialSprite = dialSprite;
         this.gameScreen = gameScreen;
         this.player = crearPlayer(isNPC);
         this.facing = Direction.SOUTH; //Despues se sobrescribe
-        this.index= index;
     }
 
-
-    public int getIndex() {
-        return index;
-    }
 
     public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
         this.x = x;
@@ -177,8 +171,6 @@ public class Actor {
     //Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
     private void initializeMove(Direction dir){
         this.facing = dir;
-        this.srcX = x;
-        this.srcY = y;
         this.destX= x + dir.getDx();
         this.destY = y + dir.getDy();
         animTimer = 0f;

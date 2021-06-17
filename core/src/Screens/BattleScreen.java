@@ -1,4 +1,4 @@
-package Screeen;
+package Screens;
 
 import Controller.BattleScreenController;
 import Controller.DialogueController;
@@ -65,10 +65,9 @@ public class BattleScreen extends AbstractScreen {
         screenViewport = new ScreenViewport();
 
 
-        Texture pjSprite = new Texture("PJ/pj0.png");
          map = new Texture("Ui/Battle screen.jpg");
 
-         pj = new ActorPeleador("poo",pjSprite, 3,powers);
+         pj = new ActorPeleador("poo", 3,powers);
 
          pj = pj.generatePower(pj, getApp().getPowerDatabase());
 
@@ -78,7 +77,7 @@ public class BattleScreen extends AbstractScreen {
 
         Texture opSprite = new Texture("res/graphics/stattusefect/white.png");
 
-         opponent = new ActorPeleador("tito",opSprite, 1, powers);
+         opponent = new ActorPeleador("tito", 1, powers);
 
         opponent = opponent.generatePower(opponent, getApp().getPowerDatabase());
 

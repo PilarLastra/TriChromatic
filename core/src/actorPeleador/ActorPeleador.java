@@ -18,12 +18,11 @@ public class ActorPeleador {
 
     private Power [] powers;
 
-    private Texture sprite;
 
 
-    public ActorPeleador(String name, Texture sprite, int level, Power [] powers) {
+
+    public ActorPeleador(String name,  int level, Power [] powers) {
         this.name = name;
-        this.sprite = sprite;
         this.level = level;
         this.hp = 250*level;
         this.powers = powers;
