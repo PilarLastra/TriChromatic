@@ -2,6 +2,7 @@ package Screens;
 
 
 import Controller.ControllerActor;
+import Controller.DialogueController;
 import Controller.Interaction_Controller;
 import Models.*;
 import Models.ObjetosEstaticos.Door;
@@ -9,6 +10,7 @@ import Models.actor.Actor;
 import Models.actor.LimitedWalkingBehavior;
 import Screens.transition.FadeInTransition;
 import Screens.transition.FadeOutTransition;
+import UI.DialogueBox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -23,9 +25,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mygdx.game.MyGame;
+import dialogue.Dialogue;
+import dialogue.DialogueNode;
 import helper.TiledMapHelper;
 
 
@@ -41,10 +49,14 @@ import static helper.Constante.PPM;
 public class GameScreen extends AbstractScreen {
 
 
+    private AnimationSet animationsPJ;
+
+
     //Controladores
     private InputMultiplexer multiplexer;
     private Interaction_Controller interactionController;
     private ControllerActor controller;
+    private DialogueController dialogueController;
 
 
     ///Creacion mundo, camara, actores, etc.
@@ -54,11 +66,17 @@ public class GameScreen extends AbstractScreen {
     private List<Actor> npcs  = new ArrayList<Actor>();;
 
 
+    ///Imagen para npc dialogo
+
+    Texture titoSprite;
+    Texture pilarSprite;
+    Texture damianSprite;
+    Texture espantapajarosSprite;
+
+
     ///Creacion del batch
     private SpriteBatch batch;
 
-
-    private Direction facing;
 
     ///Archivo
     private Gson gson;
@@ -76,6 +94,12 @@ public class GameScreen extends AbstractScreen {
     private TiledMapHelper tiledMapHelper;
 
 
+    ///UI
+    private int uiScale = 2;
+    private Stage uiStage;
+    private Table root;
+    private DialogueBox dialogueBox;
+
     // Metodos //
 
     public GameScreen(MyGame app) {
@@ -87,7 +111,7 @@ public class GameScreen extends AbstractScreen {
         TextureAtlas atlasPj = app.getAssetManager().get("PJ/player.atlas", TextureAtlas.class);
 
         //Se divide por dos pq se estima que x tile va a dar dos pasos
-        AnimationSet animationsPJ = new AnimationSet(
+         animationsPJ = new AnimationSet(
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_north"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_south"), Animation.PlayMode.LOOP_PINGPONG),
                 new Animation<TextureRegion>(0.3f / 2f, atlasPj.findRegions("dawn_walk_east"), Animation.PlayMode.LOOP_PINGPONG),
@@ -96,6 +120,7 @@ public class GameScreen extends AbstractScreen {
                 atlasPj.findRegion("dawn_stand_south"),
                 atlasPj.findRegion("dawn_stand_east"),
                 atlasPj.findRegion("dawn_stand_west"));
+
 
         TextureAtlas atlasNPC = app.getAssetManager().get("PJ/PixiPili.atlas",TextureAtlas.class);
 
@@ -157,22 +182,75 @@ public class GameScreen extends AbstractScreen {
         this.orthogonalTiledMapRenderer = tiledMapHelper.setupMap("maps/Mapa1.tmx");
 
         /*creacion de player*/
-        pj = new Actor(143/PPM,200/PPM, animationsPJ,this,false);
+        pj = new Actor(143/PPM,200/PPM,null, animationsPJ,this,false,false);
 
-        controller = new ControllerActor(pj);
+
+        ///Inicializa la interfaz visual para el usuario
+        initUI();
+
+
 
 
         /// puerta
 
         Door door = new Door(143/PPM, 210/PPM, this);
 
+
+        ///DIALOGOS
+
+        Dialogue dNPC1 = new Dialogue();
+        DialogueNode node1 = new DialogueNode("Hola! Soy una boluda, me llamo Pilar, como estas? \nBienvenido al mundo!",0);
+        DialogueNode node2 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
+        DialogueNode node3 = new DialogueNode("Hola! Soy el npc 1",2);
+        node1.makeLinear(node2.getId());
+        node2.makeLinear(node3.getId());
+        dNPC1.addNode(node1);
+        dNPC1.addNode(node2);
+        dNPC1.addNode(node3);
+        pilarSprite = new Texture("Ui/piliUWU.png");
+
+        Dialogue dNPC2 = new Dialogue();
+        DialogueNode node4 = new DialogueNode("Hola! Soy un bolud, me llamo Tito, como estas? \nBienvenido al mundo!",0);
+        DialogueNode node5 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
+        DialogueNode node6 = new DialogueNode("Hola! Soy el npc 1",2);
+        node4.makeLinear(node5.getId());
+        node5.makeLinear(node6.getId());
+        dNPC2.addNode(node4);
+        dNPC2.addNode(node5);
+        dNPC2.addNode(node6);
+        titoSprite = new Texture("Ui/tito.png");
+
+        Dialogue dNPC3 = new Dialogue();
+        DialogueNode node7 = new DialogueNode("Hola! Soy un bolud, me llamo Damian, como estas? \nBienvenido al mundo!",0);
+        DialogueNode node8 = new DialogueNode("Hola! Soy el npc 1, como estas?",1);
+        DialogueNode node9 = new DialogueNode("Hola! Soy el npc 1",2);
+        node7.makeLinear(node8.getId());
+        node8.makeLinear(node9.getId());
+        dNPC3.addNode(node7);
+        dNPC3.addNode(node8);
+        dNPC3.addNode(node9);
+        damianSprite = new Texture("Ui/demiUWU.png");
+
+
+        Dialogue dNPC4 = new Dialogue();
+        DialogueNode node10 = new DialogueNode("Oh, descubriste mi identidad! Fiuuuuuuumba \nAhora tendre que marcharme....",0);
+        dNPC4.addNode(node10);
+        espantapajarosSprite = new Texture("Ui/espantapajarosUWU.png");
+
+
+
+
         ///  npc
 
         Random rnd = new Random();
-        Actor npc = new Actor(500/PPM,150/PPM, animationsNPC,this,true);
-        Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC2,this,true);
-        Actor npc3 = new Actor (500/PPM,210/PPM, animationsNPC3,this,true);
-        Actor npc4 = new Actor (150/PPM,600/PPM, animationsNPC4,this,true);
+        Actor npc = new Actor(500/PPM,150/PPM, pilarSprite, animationsNPC,this,true,false);
+        npc.setDialogue(dNPC1);
+        Actor npc2 = new Actor (400/PPM,110/PPM,titoSprite, animationsNPC2,this,true,false);
+        npc2.setDialogue(dNPC2);
+        Actor npc3 = new Actor (500/PPM,210/PPM,damianSprite, animationsNPC3,this,true,false);
+        npc3.setDialogue(dNPC3);
+        Actor npc4 = new Actor (150/PPM,600/PPM,espantapajarosSprite, animationsNPC4,this,true,true);
+        npc4.setDialogue(dNPC4);
 
         ///le asigna comportamiento al npc
 
@@ -192,10 +270,14 @@ public class GameScreen extends AbstractScreen {
 
         multiplexer = new InputMultiplexer();
 
-        interactionController = new Interaction_Controller(pj, npcs, door, app);
+        controller = new ControllerActor(pj);
+        dialogueController = new DialogueController(dialogueBox);
+        interactionController = new Interaction_Controller(pj, npcs, door, app, dialogueController);
+
 
         multiplexer.addProcessor(0, controller);
         multiplexer.addProcessor(1, interactionController);
+        multiplexer.addProcessor(2, dialogueController);
 
 
         box2DDebugRenderer.setDrawBodies(false); // Esta linea sirve para esconder las lines de los hit boxes
@@ -208,6 +290,7 @@ public class GameScreen extends AbstractScreen {
 
         world.step(1/60f,6,2);
         cameraUpdate();
+
 
 
         orthogonalTiledMapRenderer.setView(camera);
@@ -268,11 +351,15 @@ public class GameScreen extends AbstractScreen {
 
     }
 
+
     @Override
     public void render(float delta) {
 
 
         controller.inputUpdateD(delta, 1);
+
+        uiStage.act(delta);
+
 
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){  // CORRER
             controller.inputUpdateD(delta, 3);
@@ -298,12 +385,18 @@ public class GameScreen extends AbstractScreen {
 
 
         for (Actor npc:
-                npcs) {batch.draw(npc.getSprite(), npc.getBody().getPosition().x*PPM-10, npc.getBody().getPosition().y*PPM-10,
-                17, 24);
+                npcs) {
+            batch.draw(npc.getSprite(), npc.getBody().getPosition().x * PPM - 10, npc.getBody().getPosition().y * PPM - 10,
+                    17, 24);
+            if (dialogueController.isDialogueShowing() && interactionController.isCloseNpc(npc)) {
+                npc.setStateStanding();
+                batch.draw(npc.getDialSprite(), npc.getBody().getWorldCenter().x * PPM, npc.getBody().getWorldCenter().y * PPM - 200);
+            }
         }
 
 
         batch.end();
+            uiStage.draw();
     }
 
 
@@ -330,9 +423,35 @@ public class GameScreen extends AbstractScreen {
         camera.update();
     }
 
+    public void initUI(){
+
+        uiStage = new Stage (new ScreenViewport());
+        uiStage.getViewport().update(Gdx.graphics.getWidth()/uiScale*2, Gdx.graphics.getHeight() / uiScale*2, true);
+        //Dialogue setUp
+
+        root = new Table();
+        root.setFillParent(true);
+        uiStage.addActor(root);
+        dialogueBox = new DialogueBox(getApp().getSkin());
+        dialogueBox.setVisible(false);
+        root.add(dialogueBox).expand().align(Align.bottom).pad(8f);
+
+    }
+
     public void addBehavior(LimitedWalkingBehavior a) {
         behaviors.add(a);
     }
+
+    public Actor getPj() {
+        return pj;
+    }
+
+    public void createPj (){
+
+
+    }
+
+
 
     public void addNpc(Actor a) {
         npcs.add(a);

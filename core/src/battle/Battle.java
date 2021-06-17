@@ -82,18 +82,18 @@ public class Battle {
         Dialogue dNPC1 = new Dialogue();
         Power power;
         if (!isNPC){
-            aUser = user;
+            aUser = player;
             target = opponent;
             power = aUser.getPowers(input);
-             node1 = new DialogueNode( aUser.getName()+" ha usado" + power.getName() + "!",0);
+             node1 = new DialogueNode( aUser.getName()+" ha usado " + power.getName() + "!",0);
 
         }
         else
         {
             aUser = opponent;
-            target = user;
+            target = player;
             power = aUser.getPowers(input);
-             node2 = new DialogueNode( aUser.getName()+" ha usado" + power.getName() + "!",1);
+             node2 = new DialogueNode( aUser.getName()+" ha usado " + power.getName() + "!",1);
             node1.makeLinear(node2.getId());
             dNPC1.addNode(node1);
             dNPC1.addNode(node2);
@@ -141,14 +141,13 @@ public class Battle {
 
         int level = user.getLevel();
         float base = power.getPower();
+
         float modifier = MathUtils.random(0.85f, 1.00f);
         boolean isCritical = criticalHit ();
         if (isCritical) {
             modifier = modifier * 2f;
         }
-
-
-        int damage = (int) ((  (2f*level+10f)/20  * base + 2   ) * modifier);
+        int damage = (int) ((  (2f*level+10f)/20  * base  ) * modifier);
 
         return damage;
     }
@@ -175,7 +174,7 @@ public class Battle {
         root = new Table();
         root.setFillParent(true);
         uiStage.addActor(root);
-        dialogueBox = new DialogueBox(app.getSkin(),1);
+        dialogueBox = new DialogueBox(app.getSkin());
         dialogueBox.setVisible(false);
         root.add(dialogueBox).expand().align(Align.bottomRight).pad(8f);;
 

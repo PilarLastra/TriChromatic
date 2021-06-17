@@ -24,9 +24,6 @@ public class Actor {
     private float y;
     private Direction facing;
 
-    private float worldX, worldY;
-
-    private float destX, destY; //destino
     private float animTimer;
     private float ANIM_TIMER = 0.1f; //Tiempo que dura la animacion
 
@@ -35,11 +32,14 @@ public class Actor {
 
     private Dialogue dialogue;
 
+    private boolean isEnemy;
+
 
 
     private Texture dialSprite;
 
     private Body player;
+    private BodyDef playerBody;
 
     private ACTOR_STATE state; //Para saber el estado actual del actor
 
@@ -54,14 +54,15 @@ public class Actor {
 
 // Metodos //
 
-    public Actor(float x, float y, /*Texture dialSprite,*/AnimationSet animations, GameScreen gameScreen, boolean isNPC) {
+    public Actor(float x, float y, Texture dialSprite,AnimationSet animations, GameScreen gameScreen, boolean isNPC, boolean isEnemy) {
         this.x = x;
         this.y = y;
         this.animations = animations;
         this.state = ACTOR_STATE.STANDING;
-       // this.dialSprite = dialSprite;
+        this.dialSprite = dialSprite;
         this.gameScreen = gameScreen;
         this.player = crearPlayer(isNPC);
+        this.isEnemy=isEnemy;
         this.facing = Direction.SOUTH; //Despues se sobrescribe
     }
 
@@ -69,8 +70,6 @@ public class Actor {
     public Actor(float x, float y, AnimationSet animations, HouseScreen houseScreen, boolean isNPC) {
         this.x = x;
         this.y = y;
-        this.worldX = x;
-        this.worldY = y;
         this.animations = animations;
         this.state = ACTOR_STATE.STANDING;
         this.houseScreen = houseScreen;
@@ -94,7 +93,9 @@ public class Actor {
         this.y = y;
     }
 
-
+    public boolean isEnemy() {
+        return isEnemy;
+    }
 
     public TextureRegion getSprite(){
         if (state == ACTOR_STATE.WALKING){
@@ -171,8 +172,6 @@ public class Actor {
     //Necesita saber a donde vamos y de donde venimos (full espiritual el metodo)
     private void initializeMove(Direction dir){
         this.facing = dir;
-        this.destX= x + dir.getDx();
-        this.destY = y + dir.getDy();
         animTimer = 0f;
         state = ACTOR_STATE.WALKING;
 
@@ -180,9 +179,6 @@ public class Actor {
 
     private void finishMove(){
         state = ACTOR_STATE.STANDING;
-        this.destX = 0;
-        this.destY = 0;
-
     }
 
 
@@ -217,22 +213,25 @@ public class Actor {
         return player;
     }
 
+
     public Body crearPlayer(boolean isNPC) {
 
-        BodyDef playerbody = new BodyDef();
-        playerbody.position.x = getX();
-        playerbody.position.y = getY();
+        playerBody = new BodyDef();
+        playerBody.position.x = getX();
+        playerBody.position.y = getY();
         if (isNPC)
-            playerbody.type = BodyDef.BodyType.KinematicBody; //Un objeto kinematico se mueve pero no es afectado por otros objetos
+            playerBody.type = BodyDef.BodyType.KinematicBody; //Un objeto kinematico se mueve pero no es afectado por otros objetos
         else {
-            playerbody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
+            playerBody.type = BodyDef.BodyType.DynamicBody; //Un objeto dinamico se mueve y es afectado x los objetos estaticos, etc
         }
-        playerbody.fixedRotation = true;
+        playerBody.fixedRotation = true;
+
+
         if(gameScreen != null){
-            player = gameScreen.getWorld().createBody(playerbody);
+            player = gameScreen.getWorld().createBody(playerBody);
         }
         else if(houseScreen != null){
-            player = houseScreen.getWorld().createBody(playerbody);
+            player = houseScreen.getWorld().createBody(playerBody);
         }
 
         PolygonShape shape = new PolygonShape();
@@ -248,6 +247,37 @@ public class Actor {
         return player;
 
     }
+
+    public void setPlayer(BodyDef playerBody, int x, int y) {
+       playerBody.position.x = x/PPM;
+       playerBody.position.y = y/PPM;
+        playerBody.fixedRotation = true;
+        playerBody.type = BodyDef.BodyType.DynamicBody;
+        if(gameScreen != null){
+            player = gameScreen.getWorld().createBody(playerBody);
+        }
+        else if(houseScreen != null){
+            player = houseScreen.getWorld().createBody(playerBody);
+        }
+
+    PolygonShape shape = new PolygonShape();
+
+        shape.setAsBox(17 / 2 / PPM, 24 / 2 / PPM);
+        player.createFixture(shape, 1.0F);
+        shape.dispose();
+
+    }
+
+    public BodyDef getPlayerBody() {
+        return playerBody;
+    }
+
+    public void destroyBody (){
+
+        player.getWorld().destroyBody(player);
+    }
+
+
 
 
 }

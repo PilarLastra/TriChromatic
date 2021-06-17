@@ -31,15 +31,6 @@ public class DialogueBox extends Table {
 
     }
 
-    public  DialogueBox (Skin skin, int yo){
-        super(skin);
-        this.setBackground("BOXES");
-        textLabel = new Label("\n", skin);
-        this.add(textLabel).expand().pad(25f);
-
-    }
-
-
     public void animateText (String text){
 
 

@@ -31,6 +31,17 @@ public class ActorPeleador {
 
     }
 
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public String getName() {
         return name;

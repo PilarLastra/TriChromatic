@@ -9,10 +9,6 @@ public class DamagePower extends Power{
         super(spec);
     }
 
-    @Override
-    public String message() {
-        return null;
-    }
 
     @Override
     public void usePower(Battle mechanics, ActorPeleador user, ActorPeleador target) {

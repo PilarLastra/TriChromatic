@@ -40,14 +40,14 @@ public class PowerSelectBox extends Table {
         arrows[3] = new Image(arow);
         arrows[3].setScaling(Scaling.none);
 
-        uiContainer.add(arrows[0]).space(5f);
-        uiContainer.add(labels[0]).space(5f).align(Align.left);
-        uiContainer.add(arrows[1]).space(5f);
-        uiContainer.add(labels[1]).space(5f).align(Align.left).row();
-        uiContainer.add(arrows[2]).space(5f);
-        uiContainer.add(labels[2]).space(5f).align(Align.left);
-        uiContainer.add(arrows[3]).space(5f);
-        uiContainer.add(labels[3]).space(5f).align(Align.left);
+        uiContainer.add(arrows[0]).space(5f).spaceBottom(50);
+        uiContainer.add(labels[0]).space(5f).spaceBottom(50).align(Align.left);
+        uiContainer.add(arrows[1]).space(5f).spaceBottom(50);
+        uiContainer.add(labels[1]).space(5f).spaceBottom(50).align(Align.left).row();
+        uiContainer.add(arrows[2]).space(5f).spaceBottom(50);
+        uiContainer.add(labels[2]).space(5f).spaceBottom(50).align(Align.left);
+        uiContainer.add(arrows[3]).space(5f).spaceBottom(50);
+        uiContainer.add(labels[3]).space(5f).spaceBottom(50).align(Align.left);
 
         setSelection(0);
     }
