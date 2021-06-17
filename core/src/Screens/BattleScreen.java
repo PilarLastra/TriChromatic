@@ -19,6 +19,8 @@ import com.mygdx.game.MyGame;
 import com.mygdx.game.Setting;
 import power.Power;
 
+import static helper.Constante.PPM;
+
 public class BattleScreen extends AbstractScreen {
 
 
@@ -67,7 +69,7 @@ public class BattleScreen extends AbstractScreen {
 
          map = new Texture("Ui/Battle screen.jpg");
 
-         pj = new ActorPeleador("poo", 3,powers);
+         pj = new ActorPeleador("Poo", 5,powers);
 
          pj = pj.generatePower(pj, getApp().getPowerDatabase());
 
@@ -77,7 +79,7 @@ public class BattleScreen extends AbstractScreen {
 
         Texture opSprite = new Texture("res/graphics/stattusefect/white.png");
 
-         opponent = new ActorPeleador("tito", 1, powers);
+         opponent = new ActorPeleador("Espantapajaros", 8, powers);
 
         opponent = opponent.generatePower(opponent, getApp().getPowerDatabase());
 
@@ -135,8 +137,19 @@ public class BattleScreen extends AbstractScreen {
             getApp().setScreen(getApp().getGameScreen());
 
         }
-        else
-           // getApp().setScreen(getApp().getHouseScreen());
+        else {
+            getApp().getGameScreen().getPj().destroyBody();
+            getApp().getHouseScreen().getPj().destroyBody();
+            getApp().getGameScreen().getPj().setPlayer(getApp().getHouseScreen().getPj().getPlayerBody(), 143,200);
+            getApp().getHouseScreen().getPj().setPlayer(getApp().getGameScreen().getPj().getPlayerBody(),505,410);
+            getApp().setScreen(getApp().getHouseScreen());
+            pj.setHp(pj.getMaxHp());
+            opponent.setLevel(opponent.getLevel()-1);
+            opponent.setHp(250*(opponent.getLevel()));
+            opponent.setMaxHp(opponent.getHp());
+
+
+        }
 
 
 
@@ -147,16 +160,6 @@ public class BattleScreen extends AbstractScreen {
 
         }
     }
-/*
-    public Dialogue setDialogue(){
-
-
-
-        return dialogo;
-
-    }
-
- */
 
     @Override
     public void resize(int width, int height) {

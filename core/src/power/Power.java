@@ -11,14 +11,13 @@ public abstract class Power {
         this.spec = spec;
     }
 
-    public void usePower (Battle mechanics, ActorPeleador player, ActorPeleador opponent){
-        int damage =  mechanics.calculateDamage(this,player);
-        player.applyDamage(damage);
+    public void usePower (Battle mechanics, ActorPeleador user, ActorPeleador target){
+        int damage =  mechanics.calculateDamage(this,user);
+        target.applyDamage(damage);
 
 
     }
 
-    public abstract String message();
 
 
     public String getName(){

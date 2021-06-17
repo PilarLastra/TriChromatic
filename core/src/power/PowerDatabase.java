@@ -21,8 +21,8 @@ public class PowerDatabase {
                 new PowerSpecification(
                         70,
                         0.9f,
-                        "TACKLE",
-                        "Charges the foe with a full-body tackle.")
+                        "WHISCAT",
+                        "Lanza a su rival una poderosa lata de alimento balanceado para gatos.")
                 )
 
         )
@@ -31,17 +31,17 @@ public class PowerDatabase {
                         new PowerSpecification(
                                 50,
                                 1f,
-                                "WATER GUN",
-                                "Squirts water to attack the foe.")
+                                "HERENCIA",
+                                "Donde va el padre, va el hijo.")
                 )
 
         );
         addPower (new DamagePower(
                         new PowerSpecification(
-                                100,
-                                0.75f,
-                                "Dragon Claw",
-                                "Hooks and slashes the foe with long, sharp claws.")
+                                0,
+                                1f,
+                                "QUEQUEN",
+                                "No hace nada.")
                 )
 
         );
@@ -49,8 +49,8 @@ public class PowerDatabase {
                         new PowerSpecification(
                                 150,
                                 0.5f,
-                                "Scratch",
-                                "Scratches the foe with sharp claws.")
+                                "CCHALM",
+                                "Lanza una bocanada de palabras que pueden confundir al rival.")
                 )
 
         );

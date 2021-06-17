@@ -1,12 +1,15 @@
 package Screens;
 
 import Controller.ControllerActor;
+import Controller.DialogueController;
 import Controller.Interaction_Controller;
 import Models.AnimationSet;
 import Models.ObjetosEstaticos.Door;
 import Models.actor.Actor;
 import Screens.transition.FadeInTransition;
 import Screens.transition.FadeOutTransition;
+import UI.DialogueBox;
+import battle.Battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -18,9 +21,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mygdx.game.MyGame;
+import dialogue.Dialogue;
+import dialogue.DialogueNode;
 import helper.TiledMapHelper;
 
 import java.io.FileNotFoundException;
@@ -42,6 +51,7 @@ public class HouseScreen extends AbstractScreen{
     // Controladores
 
     private Interaction_Controller interactionController;
+    private DialogueController dialogueController;
     private ControllerActor controller;
     private InputMultiplexer multiplexer;
 
@@ -57,6 +67,11 @@ public class HouseScreen extends AbstractScreen{
     private JsonReader reader1;
     private JsonReader reader2;
     private String booleano;
+
+    ///Interfaz visual dialogos
+    private Stage uiStage;
+    private Table root;
+    private DialogueBox dialogueBox;
 
     public HouseScreen(MyGame app) {
         super(app);
@@ -89,6 +104,7 @@ public class HouseScreen extends AbstractScreen{
 
         // PJ
 
+        initUI();
         pj = new Actor(505/PPM, 410/PPM, animationsPJ,this,false);
 
         controller = new ControllerActor(pj);
@@ -100,6 +116,7 @@ public class HouseScreen extends AbstractScreen{
         // Interaction Controller
 
         interactionController = new Interaction_Controller(pj, door, app);
+        dialogueController = new DialogueController(dialogueBox);
 
         // Multiplexer
 
@@ -107,6 +124,7 @@ public class HouseScreen extends AbstractScreen{
 
         multiplexer.addProcessor(0, controller);
         multiplexer.addProcessor(1, interactionController);
+        multiplexer.addProcessor(2, dialogueController);
 
         // Ver o no las hitboxes
 
@@ -114,13 +132,16 @@ public class HouseScreen extends AbstractScreen{
     }
 
 
-
+    public Actor getPj() {
+        return pj;
+    }
 
     @Override
     public void update(float delta) {
 
         world.step(1/60f,6,2);
         cameraUpdate();
+        uiStage.act(delta);
 
         orthogonalTiledMapRenderer.setView(camera);
         batch.setProjectionMatrix(camera.combined);
@@ -200,7 +221,8 @@ public class HouseScreen extends AbstractScreen{
                 17, 24);
 
         batch.end();
-/*
+        uiStage.draw();
+
         if(getApp().getBattleScreen().getBattle().getState() == Battle.STATE.LOSE)
         {
             Dialogue lose = new Dialogue();
@@ -209,7 +231,7 @@ public class HouseScreen extends AbstractScreen{
             dialogueController.startDialogue(lose);
             getApp().getBattleScreen().getBattle().setStateReady();
         }
-*/        // ESTO IRA CUANDO HAYA IMPLEMENTACION DE DIALOGO
+
 
 
     }
@@ -234,5 +256,18 @@ public class HouseScreen extends AbstractScreen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    public void initUI(){
+
+        uiStage= new Stage(new ScreenViewport());
+        //Dialogue setUp
+        root = new Table();
+        root.setFillParent(true);
+        uiStage.addActor(root);
+        dialogueBox = new DialogueBox(getApp().getSkin());
+        dialogueBox.setVisible(false);
+        root.add(dialogueBox).expand().align(Align.bottomRight).pad(8f);;
+
     }
 }

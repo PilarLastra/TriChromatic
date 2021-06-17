@@ -27,26 +27,9 @@ public class SkinGenerator {
 
         TextureAtlas uiAtlas = assetManager.get("Ui/textBox.atlas");
 
-        TextureAtlas uiPack = assetManager.get("Ui/uipack.atlas");
 
         NinePatch dialoguebox = new NinePatch(uiAtlas.findRegion("BOXES"), 10, 10, 5, 5);
         skin.add("BOXES", dialoguebox);
-
-        NinePatch optionBox = new NinePatch(uiPack.findRegion("optionbox"),6,6,6,6);
-        skin.add("optionbox", optionBox);
-
-
-        NinePatch battleinfobox = new NinePatch(uiPack.findRegion("battleinfobox"),14,14,5,8);
-        battleinfobox.setPadLeft((int)battleinfobox.getTopHeight());
-        skin.add("battleinfobox",battleinfobox);
-        skin.add("arrow", uiPack.findRegion("arrow"), TextureRegion.class);
-        skin.add("hpbar_side", uiPack.findRegion("hpbar_side"), TextureRegion.class);
-        skin.add("hpbar_bar", uiPack.findRegion("hpbar_bar"), TextureRegion.class);
-        skin.add("green", uiPack.findRegion("green"), TextureRegion.class);
-        skin.add("yellow", uiPack.findRegion("yellow"), TextureRegion.class);
-        skin.add("red", uiPack.findRegion("red"), TextureRegion.class);
-        skin.add("background_hpbar", uiPack.findRegion("background_hpbar"), TextureRegion.class);
-
 
 
 

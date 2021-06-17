@@ -53,7 +53,6 @@ public class MyGame extends Game {
 		assetManager = new AssetManager();
 
 
-		assetManager.load("Ui/uipack.atlas", TextureAtlas.class);
 		assetManager.load("PJ/player.atlas", TextureAtlas.class);
 		assetManager.load("PJ/PixiPili.atlas",TextureAtlas.class);
 
@@ -88,7 +87,7 @@ public class MyGame extends Game {
 		transitionScreen = new TransitionScreen(this);
 
 
-		this.setScreen(battleScreen);
+		this.setScreen(startscreen);
 
 
 	}

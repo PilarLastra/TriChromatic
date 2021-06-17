@@ -5,6 +5,7 @@ import Models.ObjetosEstaticos.Door;
 import Models.actor.Actor;
 import Screens.GameScreen;
 import Screens.HouseScreen;
+import battle.Battle;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -37,22 +38,25 @@ public class Interaction_Controller extends InputAdapter {
 
 
 
-    public Interaction_Controller(Actor player, List<Actor> npcs,  Door door, DialogueController dialogueController) {
+    public Interaction_Controller(Actor player, List<Actor> npcs,  Door door, MyGame app, DialogueController dialogueController) {
         this.player = player;
         this.npcs = npcs;
         bodyPJ = player.getBody();
         this.door = door;
         this.dialogueController = dialogueController;
+        this.app = app;
 
     }
 
-    public Interaction_Controller(Actor player, List<Actor> npcs, Door door, MyGame app) {
+    /*public Interaction_Controller(Actor player, List<Actor> npcs, Door door, MyGame app) {
         this.player = player;
         this.npcs = npcs;
         this.bodyPJ = player.getBody();
         this.door = door;
         this.app = app;
     }
+
+     */
 
     public Interaction_Controller(Actor player, Door door, MyGame app) {
         this.player = player;
@@ -68,17 +72,32 @@ public class Interaction_Controller extends InputAdapter {
 
         if (keycode == Input.Keys.X) {
             for (Actor npc : npcs) {
-                if (isCloseNpc(npc)) {
+                if (isCloseNpc(npc) && !npc.isEnemy()) {
                     if (npc.refaceWithoutAnimation(Direction.getOpposite(player.getFacing()))) {
                         if(npc.getDialogue() != null){
                             Dialogue dialogue = npc.getDialogue();
                             dialogueController.startDialogue(dialogue);
-
+                            break;
                         }
 
-                        break;
+                    }
+
+                }
+                else if (isCloseNpc(npc) && npc.isEnemy()){
+                    if (npc.refaceWithoutAnimation(Direction.getOpposite(player.getFacing()))) {
+                        app.setScreen(app.getBattleScreen());
+                        if (app.getBattleScreen().getBattle().getState() == Battle.STATE.WIN) {
+                            if(npc.getDialogue() != null) {
+                                Dialogue dialogue = npc.getDialogue();
+                                dialogueController.startDialogue(dialogue);
+                                npcs.remove(npc);
+                                npc.destroyBody();
+                                break;
+                            }
+                        }
                     }
                 }
+
             }
 
             if(isCloseDoor(door)){
