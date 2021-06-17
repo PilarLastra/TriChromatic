@@ -133,8 +133,19 @@ public class GameScreen extends AbstractScreen {
                 atlasNPC3.findRegion("stand_oeste"),
                 atlasNPC3.findRegion("stand_este"));
 
+        TextureAtlas atlasNPC4 = app.getAssetManager().get("PJ/Enemigos.atlas",TextureAtlas.class);
 
+        AnimationSet animationsNPC4 = new AnimationSet(
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC4.findRegions("camina_norte"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC4.findRegions("camina_frente"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC4.findRegions("camina_oeste"), Animation.PlayMode.LOOP_PINGPONG),
+                new Animation<TextureRegion>(0.3f / 2f, atlasNPC4.findRegions("camina_este"), Animation.PlayMode.LOOP_PINGPONG),
+                atlasNPC4.findRegion("stand_norte"),
+                atlasNPC4.findRegion("stand frente"),
+                atlasNPC4.findRegion("stand_oeste"),
+                atlasNPC4.findRegion("stand_este"));
 
+        //-----------------------------------------------------------------------------------------------------------------------------------------------//
 
         camera = new OrthographicCamera();
         widthScreen = Gdx.graphics.getWidth();
@@ -161,19 +172,23 @@ public class GameScreen extends AbstractScreen {
         Actor npc = new Actor(500/PPM,150/PPM, animationsNPC,this,true);
         Actor npc2 = new Actor (400/PPM,110/PPM, animationsNPC2,this,true);
         Actor npc3 = new Actor (500/PPM,210/PPM, animationsNPC3,this,true);
+        Actor npc4 = new Actor (150/PPM,600/PPM, animationsNPC4,this,true);
 
         ///le asigna comportamiento al npc
 
         LimitedWalkingBehavior behavior1 = new LimitedWalkingBehavior(npc, 0.5f,0.5f,0.5f,0,0,2,rnd);
         LimitedWalkingBehavior behavior2 = new LimitedWalkingBehavior(npc2, 0.5f,0.5f,1,1,0,3,rnd);
         LimitedWalkingBehavior behavior3 = new LimitedWalkingBehavior(npc3, 1,1,1,1,0,3,rnd);
+        LimitedWalkingBehavior behavior4 = new LimitedWalkingBehavior(npc4, 0,0,1,1,0,1,rnd);
 
         addNpc(npc);
         addNpc(npc2);
         addNpc(npc3);
+        addNpc(npc4);
         addBehavior(behavior1);
         addBehavior(behavior2);
         addBehavior(behavior3);
+        addBehavior(behavior4);
 
         multiplexer = new InputMultiplexer();
 
